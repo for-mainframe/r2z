@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+}
+
+group 'ibagroup.eu'
+version '0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    compile 'com.squareup.retrofit2:retrofit:2.9.0',
+            'com.squareup.retrofit2:converter-gson:2.9.0',
+            'com.google.code.gson:gson:2.8.5',
+            'org.junit.jupiter:junit-jupiter-api:5.0.2'
+}
+
+test {
+    useJUnitPlatform()
+}
