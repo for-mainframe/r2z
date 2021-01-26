@@ -1,8 +1,8 @@
-import ibagroup.eu.r2z.JESApi
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ibagroup.eu.r2z.BytesConverterFactory
 import java.lang.Exception
 import java.security.SecureRandom
 import java.security.cert.CertificateException
@@ -12,6 +12,13 @@ import javax.net.ssl.*
 inline fun <reified Api> buildGsonApi(baseUrl: String, client: OkHttpClient) = Retrofit.Builder()
   .baseUrl(baseUrl)
   .addConverterFactory(GsonConverterFactory.create())
+  .client(client)
+  .build()
+  .create(Api::class.java)
+
+inline fun <reified Api> buildApi(baseUrl: String, client: OkHttpClient) = Retrofit.Builder()
+  .baseUrl(baseUrl)
+  .addConverterFactory(BytesConverterFactory.create())
   .client(client)
   .build()
   .create(Api::class.java)
