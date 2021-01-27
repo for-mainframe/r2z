@@ -26,8 +26,8 @@ interface JESApi {
 }
 
 enum class UseStepData(val value:String) {
-  @SerializedName("Y") ENABLE("Y"),
-  @SerializedName("N") DISABLE("N");
+  ENABLE("Y"),
+  DISABLE("N");
 
 
   override fun toString(): String {
