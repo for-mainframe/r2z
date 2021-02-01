@@ -19,17 +19,6 @@ class ListFilteredJobsTest : BaseTest() {
   val USER_CORRELATOR = "MY_USER_CORRELATOR"
 
 
-  @BeforeAll
-  fun setUp(){
-    val retrofit = Retrofit.Builder()
-      .baseUrl(BASE_URL)
-      .addConverterFactory(GsonConverterFactory.create())
-      .client(getUnsafeOkHttpClient())
-      .build()
-
-    jesApi = retrofit.create(JESApi::class.java)
-  }
-
   @Test
   @Timeout(value = 3, unit = TimeUnit.SECONDS)
   fun getFilteredListByOwnerTest(){
