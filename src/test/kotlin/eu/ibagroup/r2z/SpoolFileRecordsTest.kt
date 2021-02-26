@@ -1,15 +1,9 @@
-import eu.ibagroup.r2z.BinaryMode
-import eu.ibagroup.r2z.BytesConverterFactory
-import eu.ibagroup.r2z.JESApi
-import eu.ibagroup.r2z.RecordRange
-import okhttp3.OkHttpClient
+package eu.ibagroup.r2z
+
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import retrofit2.Call
-import retrofit2.Retrofit
-
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

@@ -1,6 +1,5 @@
-import eu.ibagroup.r2z.JESApi
-import eu.ibagroup.r2z.JobStatus
-import eu.ibagroup.r2z.UseStepData
+package eu.ibagroup.r2z
+
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

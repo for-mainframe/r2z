@@ -1,8 +1,9 @@
+package eu.ibagroup.r2z
+
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import eu.ibagroup.r2z.BytesConverterFactory
 import java.lang.Exception
 import java.security.SecureRandom
 import java.security.cert.CertificateException

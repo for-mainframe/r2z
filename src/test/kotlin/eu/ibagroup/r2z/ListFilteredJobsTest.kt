@@ -1,11 +1,8 @@
-import eu.ibagroup.r2z.JESApi
-import eu.ibagroup.r2z.JobStatus
+package eu.ibagroup.r2z
+
 import org.junit.jupiter.api.*
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.locks.ReentrantLock
 import java.util.regex.Pattern
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
