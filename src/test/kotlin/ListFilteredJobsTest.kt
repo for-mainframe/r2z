@@ -1,5 +1,5 @@
-import ibagroup.eu.r2z.JESApi
-import ibagroup.eu.r2z.JobStatus
+import eu.ibagroup.r2z.JESApi
+import eu.ibagroup.r2z.JobStatus
 import org.junit.jupiter.api.*
 import retrofit2.Call
 import retrofit2.Retrofit

@@ -1,7 +1,7 @@
-import ibagroup.eu.r2z.BinaryMode
-import ibagroup.eu.r2z.BytesConverterFactory
-import ibagroup.eu.r2z.JESApi
-import ibagroup.eu.r2z.RecordRange
+import eu.ibagroup.r2z.BinaryMode
+import eu.ibagroup.r2z.BytesConverterFactory
+import eu.ibagroup.r2z.JESApi
+import eu.ibagroup.r2z.RecordRange
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll

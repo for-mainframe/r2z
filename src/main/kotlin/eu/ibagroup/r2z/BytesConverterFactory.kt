@@ -1,4 +1,4 @@
-package ibagroup.eu.r2z
+package eu.ibagroup.r2z
 
 import okhttp3.ResponseBody
 import retrofit2.Converter

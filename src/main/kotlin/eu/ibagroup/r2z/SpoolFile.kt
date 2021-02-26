@@ -1,4 +1,4 @@
-package ibagroup.eu.r2z
+package eu.ibagroup.r2z
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

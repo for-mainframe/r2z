@@ -1,12 +1,9 @@
-import ibagroup.eu.r2z.JESApi
-import ibagroup.eu.r2z.SpoolFile
+import eu.ibagroup.r2z.JESApi
+import eu.ibagroup.r2z.SpoolFile
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ListSpoolFilesTest : BaseTest(){

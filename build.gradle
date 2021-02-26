@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
 }
 
-group 'ibagroup.eu'
+group 'eu.ibagroup'
 version '0.1'
 
 repositories {
