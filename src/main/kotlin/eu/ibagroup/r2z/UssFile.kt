@@ -15,7 +15,7 @@ data class UssFile(
 
   @SerializedName("size")
   @Expose
-  val size: Int? = null,
+  val size: Long? = null,
 
   @SerializedName("uid")
   @Expose
