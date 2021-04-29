@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 
 class DataAPITest {
 
-  private val dataAPI = buildApi<DataAPI>(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient)
+  private val dataAPI = buildGsonApi<DataAPI>(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient)
   private val infoAPI = buildApi<InfoAPI>(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient)
 
   @Test
@@ -44,8 +44,9 @@ class DataAPITest {
   fun testListUss() {
     val request = dataAPI.listUssPath(
       authorizationToken = basicCreds,
-      path = "/u/KIRYL",
-      depth = 3
+      path = "/u/CHP/test-env/test-files/testprog-jcl",
+      depth = 1,
+      followSymlinks = SymlinkMode.REPORT
     )
     val response = request.execute()
     response.body()?.items?.forEach {
