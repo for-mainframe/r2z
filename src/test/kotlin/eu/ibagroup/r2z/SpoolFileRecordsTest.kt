@@ -10,10 +10,9 @@ import retrofit2.Call
 class SpoolFileRecordsTest : BaseTest() {
   val jesApi = buildApi<JESApi>(BASE_URL, getUnsafeOkHttpClient())
 
-  val JOB_CORRELATOR = "J0000440S0W1....D92237DC.......:"
-  val JOB_ID = "JOB00440"
+  val JOB_CORRELATOR = "J0005744S0W1....D999BDEB.......:"
+  val JOB_ID = "JOB05569"
   val JOB_NAME = "NOTHINGJ"
-
 
   @Test
   fun getRecordsInBinaryModeTest() {

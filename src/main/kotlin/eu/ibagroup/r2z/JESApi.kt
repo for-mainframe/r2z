@@ -1,14 +1,16 @@
 package eu.ibagroup.r2z
 
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import ibagroup.eu.r2z.CanJobPrgOutRequest
+import ibagroup.eu.r2z.HoldJobRequest
+import ibagroup.eu.r2z.ReleaseJobRequest
+import ibagroup.eu.r2z.SubmitJobRequest
 import okhttp3.ResponseBody
 import okio.ByteString
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.lang.IllegalArgumentException
 
 interface JESApi {
@@ -87,6 +89,64 @@ interface JESApi {
     @Query("mode") mode: BinaryMode = BinaryMode.TEXT,
     @Header("X-IBM-Record-Range") range: RecordRange? = null
   ): Call<ByteArray>
+
+  @PUT("/zosmf/restjobs/jobs/{jobname}/{jobid}")
+  fun holdJobRequest(
+    @Header("Authorization") basicCredentials: String,
+    @Path("jobname") jobName: String,
+    @Path("jobid") jobId: String,
+    @Body body: JsonObject
+  ): Call<HoldJobRequest>
+
+  @PUT("/zosmf/restjobs/jobs/{job-correlator}")
+  fun holdJobRequest(
+    @Header("Authorization") basicCredentials: String,
+    @Path("job-correlator") jobCorrelator: String,
+    @Body body: JsonObject
+  ): Call<HoldJobRequest>
+
+  @PUT("/zosmf/restjobs/jobs/{jobname}/{jobid}")
+  fun releaseJobRequest(
+    @Header("Authorization") basicCredentials: String,
+    @Path("jobname") jobName: String,
+    @Path("jobid") jobId: String,
+    @Body body: JsonObject
+  ): Call<ReleaseJobRequest>
+
+  @PUT("/zosmf/restjobs/jobs/{job-correlator}")
+  fun releaseJobRequest(
+    @Header("Authorization") basicCredentials: String,
+    @Path("job-correlator") jobCorrelator: String,
+    @Body body: JsonObject
+  ): Call<ReleaseJobRequest>
+
+  @DELETE("/zosmf/restjobs/jobs/{jobname}/{jobid}")
+  fun canJobPrgOutRequest(
+    @Header("Authorization") basicCredentials: String,
+    @Header("X-IBM-Job-Modify-Version") version : String,
+    @Path("jobname") jobName: String,
+    @Path("jobid") jobId: String
+  ): Call<CanJobPrgOutRequest>
+
+  @DELETE("/zosmf/restjobs/jobs/{job_correlator}")
+  fun canJobPrgOutRequest(
+    @Header("Authorization") basicCredentials: String,
+    @Header("X-IBM-Job-Modify-Version") version : String,
+    @Path("job-correlator") jobId: String
+  ): Call<CanJobPrgOutRequest>
+
+  @PUT("/zosmf/restjobs/jobs")
+  fun submitJobRequest(
+    @Header("Authorization") basicCredentials: String,
+    @Header("X-IBM-Inrdr-Mode") mode: String,
+    @Body body: String
+  ): Call<SubmitJobRequest>
+
+  @PUT("/zosmf/restjobs/jobs")
+  fun submitJobRequest(
+    @Header("Authorization") basicCredentials: String,
+    @Body body: JsonObject
+  ): Call<SubmitJobRequest>
 }
 
 enum class UseStepData(val value:String) {

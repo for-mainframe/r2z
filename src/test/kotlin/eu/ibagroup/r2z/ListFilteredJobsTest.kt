@@ -9,10 +9,10 @@ import java.util.regex.Pattern
 class ListFilteredJobsTest : BaseTest() {
 
   var jobs: List<JobStatus> = emptyList()
-  var jesApi: JESApi = buildApi(BASE_URL, getUnsafeOkHttpClient())
+  var jesApi: JESApi = buildGsonApi(BASE_URL, getUnsafeOkHttpClient())
 
 
-  val JOB_ID = "JOB00440"
+  val JOB_ID = "JOB05569"
   val USER_CORRELATOR = "MY_USER_CORRELATOR"
 
 
@@ -20,9 +20,9 @@ class ListFilteredJobsTest : BaseTest() {
   @Timeout(value = 3, unit = TimeUnit.SECONDS)
   fun getFilteredListByOwnerTest(){
 
-    val call = jesApi.getFilteredJobs( BASIC_AUTH_TOKEN,"VKRUS")
+    val call = jesApi.getFilteredJobs( BASIC_AUTH_TOKEN,"HLH")
     executeCallAndCheckResult(call){ job ->
-      Assertions.assertEquals(job.owner, "VKRUS")
+      Assertions.assertEquals(job.owner, "HLH")
     }
 
   }
