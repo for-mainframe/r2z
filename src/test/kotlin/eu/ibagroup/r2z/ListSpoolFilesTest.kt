@@ -8,10 +8,10 @@ import retrofit2.Call
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ListSpoolFilesTest : BaseTest(){
 
-  var jesApi: JESApi = buildApi(BASE_URL, getUnsafeOkHttpClient())
+  var jesApi: JESApi = buildGsonApi(BASE_URL, getUnsafeOkHttpClient())
 
   val JOB_CORRELATOR = "J0000440S0W1....D92237DC.......:"
-  val JOB_ID = "JOB00440"
+  val JOB_ID = "JOB05591"
   val JOB_NAME = "NOTHINGJ"
 
 
