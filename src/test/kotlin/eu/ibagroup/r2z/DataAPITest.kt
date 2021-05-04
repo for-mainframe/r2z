@@ -7,11 +7,7 @@ import org.junit.jupiter.api.Test
 class DataAPITest {
 
   private val dataAPI = buildGsonApi<DataAPI>(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient)
-<<<<<<< HEAD
   private val infoAPI = buildApi<InfoAPI>(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient)
-=======
-  private val infoAPI = buildGsonApi<InfoAPI>(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient)
->>>>>>> a1416e0 (IJMP-91: Added requests for hold/release job, cancel and purge job, submit job)
 
   @Test
   fun testListDatasets() {
