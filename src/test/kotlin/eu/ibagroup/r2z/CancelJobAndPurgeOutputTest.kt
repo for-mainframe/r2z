@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class CancelJobAndPurgeOutputTest : BaseTest() {
-    val JOB_ID = "JOB05571"
+    val JOB_ID = "JOB06081"
     val JOB_NAME = "NOTHINGJ"
 
     val JOB_CORRELATOR = "J0001561S0W1....D940967F.......:"
@@ -39,7 +39,7 @@ class CancelJobAndPurgeOutputTest : BaseTest() {
             println(jobStatus!!.status)
             Assertions.assertEquals(SUCCESSFUL_REQUEST_RESULT, jobStatus.status)
             Assertions.assertNotNull(jobStatus!!.owner)
-            Assertions.assertEquals(jobStatus!!.owner?.toLowerCase(), "zosmfad")
+            Assertions.assertEquals(jobStatus!!.owner?.toLowerCase(), "hlh")
         } else
         {
             println(response.errorBody())

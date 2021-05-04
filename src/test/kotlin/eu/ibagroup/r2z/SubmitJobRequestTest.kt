@@ -61,7 +61,7 @@ class SubmitJobRequestTest : BaseTest() {
             println(jobStatus!!.jobname)
             println(jobStatus!!.status)
             Assertions.assertNotNull(jobStatus!!.owner)
-            Assertions.assertEquals(jobStatus!!.owner?.toLowerCase(), "zosmfad")
+            Assertions.assertEquals(jobStatus!!.owner?.toLowerCase(), "hlh")
         } else {
             println(response.errorBody())
             Assertions.assertTrue(false)

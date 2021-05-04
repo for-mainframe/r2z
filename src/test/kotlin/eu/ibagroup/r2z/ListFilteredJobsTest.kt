@@ -13,7 +13,7 @@ class ListFilteredJobsTest : BaseTest() {
 
 
   val JOB_ID = "JOB05569"
-  val USER_CORRELATOR = "MY_USER_CORRELATOR"
+  val USER_CORRELATOR = "J0006081S0W1....D9A8D97A.......:"
 
 
   @Test
