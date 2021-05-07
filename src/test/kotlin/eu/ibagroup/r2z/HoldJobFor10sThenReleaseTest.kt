@@ -1,6 +1,7 @@
-import com.google.gson.JsonObject
 import eu.ibagroup.r2z.BaseTest
+import eu.ibagroup.r2z.HoldJobRequestBody
 import eu.ibagroup.r2z.JESApi
+import eu.ibagroup.r2z.ReleaseJobRequestBody
 import ibagroup.eu.r2z.HoldJobRequest
 import ibagroup.eu.r2z.ReleaseJobRequest
 import org.junit.jupiter.api.Assertions
@@ -10,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class HoldFor20sThenReleaseJobTest : BaseTest() {
-    val JOB_ID = "JOB05744"
+    val JOB_ID = "JOB06152"
     val JOB_NAME = "NOTHINGJ"
 
     val JOB_CORRELATOR = "J0001561S0W1....D940967F.......:"
@@ -19,7 +20,7 @@ class HoldFor20sThenReleaseJobTest : BaseTest() {
     val SUCCESSFUL_REQUEST_RESULT = 0
 
     @Test
-    fun holdFor20sThenReleaseJob() {
+    fun holdFor10sThenReleaseJobTest() {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -27,20 +28,17 @@ class HoldFor20sThenReleaseJobTest : BaseTest() {
             .build()
 
         val request = retrofit.create(JESApi::class.java)
-        val body = JsonObject()
-        body.addProperty("request", "release")
-        body.addProperty("version", "2.0")
         val firstCall: Call<HoldJobRequest> = request.holdJobRequest(BASIC_AUTH_TOKEN,
-            JOB_NAME, JOB_ID, body)
+            JOB_NAME, JOB_ID, HoldJobRequestBody()
+        )
+
         enqueueHoldCallAndCheckResult(firstCall)
 
         Thread.sleep(10000)
 
-        val body2 = JsonObject()
-        body2.addProperty("request", "hold")
-        body2.addProperty("version", "2.0")
         val secondCall: Call<ReleaseJobRequest> = request.releaseJobRequest(BASIC_AUTH_TOKEN,
-            JOB_NAME, JOB_ID, body2)
+            JOB_NAME, JOB_ID, ReleaseJobRequestBody()
+        )
 
         enqueueReleaseCallAndCheckResult(secondCall)
     }
