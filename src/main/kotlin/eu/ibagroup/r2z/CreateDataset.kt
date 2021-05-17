@@ -18,7 +18,7 @@ data class CreateDataset(
 
   @SerializedName("alcunit")
   @Expose
-  var allocationUnit : AllocationUnit,
+  var allocationUnit : AllocationUnit? = null,
 
   @SerializedName("primary")
   var primaryAllocation: Int,
@@ -53,7 +53,10 @@ data class CreateDataset(
 
   @SerializedName("dataclass")
   @Expose
-  var dataClass: String? = null
+  var dataClass: String? = null,
+
+  @SerializedName("avgblk")
+  var averageBlockLength: Int? = null
 
 )
 
@@ -62,6 +65,7 @@ enum class AllocationUnit(private val type : String) {
   TRK("TRK"),
   @SerializedName("CYL")
   CYL("CYL"),
+  @Deprecated("This one doesn't work in z/OSMF. Just to simplify For Mainframe plugin")
   @SerializedName("BLK")
   BLK("BLK");
 

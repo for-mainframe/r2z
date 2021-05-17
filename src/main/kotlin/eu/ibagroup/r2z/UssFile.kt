@@ -19,7 +19,7 @@ data class UssFile(
 
   @SerializedName("uid")
   @Expose
-  val uid: Int? = null,
+  val uid: Long? = null,
 
   @SerializedName("user")
   @Expose
@@ -27,7 +27,7 @@ data class UssFile(
 
   @SerializedName("gid")
   @Expose
-  val gid: Int? = null,
+  val gid: Long? = null,
 
   @SerializedName("group")
   @Expose
