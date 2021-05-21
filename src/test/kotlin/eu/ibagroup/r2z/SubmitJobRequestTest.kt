@@ -1,6 +1,5 @@
 package eu.ibagroup.r2z
 
-import com.google.gson.JsonObject
 import ibagroup.eu.r2z.SubmitJobRequest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -21,10 +20,9 @@ class SubmitJobRequestTest : BaseTest() {
             .build()
 
         val request = retrofit.create(JESApi::class.java)
-        val body = JsonObject()
-        body.addProperty("file", JOB_PATH)
-        val firstCall: Call<SubmitJobRequest> = request.submitJobRequest(BASIC_AUTH_TOKEN, body)
-        enqueueSubmitJob(firstCall)
+        val call: Call<SubmitJobRequest> = request.submitJobRequest(BASIC_AUTH_TOKEN,
+            body = SubmitFileNameBody(file = JOB_PATH))
+        enqueueSubmitJob(call)
     }
 
     @Test
@@ -48,9 +46,8 @@ class SubmitJobRequestTest : BaseTest() {
                 "//SYSPROC     DD   DSN=HHAL.PLUGIN.TEST.JOBS,DISP=SHR\n" +
                 "//SYSTSPRT    DD   SYSOUT=*\n" +
                 "//SYSTSIN     DD   DUMMY,DCB=BLKSIZE=80"
-        val firstCall: Call<SubmitJobRequest> = request.submitJobRequest(BASIC_AUTH_TOKEN,
-            "TEXT", body)
-        enqueueSubmitJob(firstCall)
+        val call: Call<SubmitJobRequest> = request.submitJobRequest(BASIC_AUTH_TOKEN, body = body)
+        enqueueSubmitJob(call)
     }
 
     fun enqueueSubmitJob(call: Call<SubmitJobRequest>) {

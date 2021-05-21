@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 val zosmfUrl = System.getenv("ZOSMF_TEST_URL") ?: ""
-val zosmfUser = System.getenv("ZOSMF_TEST_USER") ?: ""
+val zosmfUser = System.getenv("ZOSMF_TEST_USERNAME") ?: ""
 val zosmfPassword = System.getenv("ZOSMF_TEST_PASSWORD") ?: ""
 
 val basicCreds = Credentials.basic(zosmfUser, zosmfPassword) ?: ""

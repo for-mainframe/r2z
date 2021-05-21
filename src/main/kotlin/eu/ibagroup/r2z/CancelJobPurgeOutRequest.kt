@@ -3,7 +3,7 @@ package ibagroup.eu.r2z
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class CanJobPrgOutRequest(
+data class CancelJobPurgeOutRequest(
     @SerializedName("jobid")
     @Expose
     var jobid: String? = null,

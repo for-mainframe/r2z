@@ -2,6 +2,8 @@ package eu.ibagroup.r2z
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import eu.ibagroup.r2z.annotations.AvailableSince
+import eu.ibagroup.r2z.annotations.ZVersion
 
 data class CreateDataset(
   @SerializedName("volser")
@@ -43,7 +45,7 @@ data class CreateDataset(
   @Expose
   var recordLength: Int? = null,
 
-  @SerializedName("storeclass")
+  @SerializedName("storclass")
   @Expose
   var storageClass: String? = null,
 
@@ -56,8 +58,16 @@ data class CreateDataset(
   var dataClass: String? = null,
 
   @SerializedName("avgblk")
-  var averageBlockLength: Int? = null
+  var averageBlockLength: Int? = null,
 
+  @SerializedName("dsntype")
+  @Expose
+  var dsnType: DsnameType? = null,
+
+  @AvailableSince(ZVersion.ZOS_2_4)
+  @SerializedName("like")
+  @Expose
+  var datasetModel: String? = null
 )
 
 enum class AllocationUnit(private val type : String) {

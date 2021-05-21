@@ -354,7 +354,6 @@ interface DataAPI {
     @Query("research") research: String? = null,
     @Query("insensitive") insensitive: Boolean? = null,
     @Query("maxreturnsize") maxReturnSize: Int? = null
-
   ): Call<String>
 
   @PUT("/zosmf/restfiles/fs/{filepath-name}")
