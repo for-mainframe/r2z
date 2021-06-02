@@ -14,7 +14,7 @@ data class SubmitJobRequest (
 
     @SerializedName("subsystem")
     @Expose
-    var subsystem: Any? = null,
+    var subsystem: String? = null,
 
     @SerializedName("owner")
     @Expose
@@ -34,7 +34,7 @@ data class SubmitJobRequest (
 
     @SerializedName("retcode")
     @Expose
-    var retcode: Any? = null,
+    var retcode: String? = null,
 
     @SerializedName("url")
     @Expose
