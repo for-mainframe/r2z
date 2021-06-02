@@ -1,3 +1,5 @@
+// Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
+
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.30'
@@ -12,7 +14,7 @@ apply plugin: 'maven-publish'
 
 archivesBaseName = 'r2z'
 group 'eu.ibagroup'
-version '1.0.12'
+version projectVersion
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -51,119 +53,113 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-//
-//
-//task sourceJar(type: Jar) {
-//    classifier "sources"
-//    from sourceSets.main.allJava
-//}
-//
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    classifier "javadoc"
-//    from javadoc.destinationDir
-//}
-//
-//artifacts {
-//    archives jar
-//    archives sourceJar
-//    archives javadocJar
-//}
-//
-//signing {
-//    sign configurations.archives
-//    required {
-//        // signing is required if this is a release version and the artifacts are to be published
-//        !version.toString().endsWith('-SNAPSHOT') && tasks.withType(PublishToMavenRepository).find {
-//            gradle.taskGraph.hasTask it
-//        }
-//    }
-//    sign publishing.publications
-//}
-//
-//
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            customizePom(pom)
-//            groupId 'eu.ibagroup'
-//            artifactId 'r2z'
-//            version projectVersion
-//
-//            from components.java
-//
-//
-//            artifact(sourceJar) {
-//                classifier = 'sources'
-//            }
-//            artifact(javadocJar) {
-//                classifier = 'javadoc'
-//            }
-//        }
-//    }
-//    repositories {
-//        maven {
-//            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
-//            credentials {
-//                username ossrhUsername
-//                password ossrhPassword
-//            }
-//        }
-//    }
-//}
-////какая-то неимоверная дичь
-//def customizePom(pom) {
-//    pom.withXml {
-//        def root = asNode()
-//
-//        // eliminate test-scoped dependencies (no need in maven central POMs)
-//        root.dependencies.removeAll { dep ->
-//            dep.scope == "test"
-//        }
-//
-//        // add all items necessary for maven central publication
-//        root.children().last() + {
-//            resolveStrategy = Closure.DELEGATE_FIRST
-//
-//            description 'Library that allows to perform http requests to IBM z/OSMF REST API with the help of Retorfit2.'
-//            name 'Retrofit2-ZOSMF-Library'
-//            url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library'
-//
-//            issueManagement {
-//                system 'GitHub'
-//                url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library/issues'
-//            }
-//            licenses {
-//                license {
-//                    name 'Apache License 2.0'
-//                    url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library/blob/main/License'
-//                    distribution 'repo'
-//                }
-//            }
-//            scm {
-//                url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library'
-//                connection 'scm:git:git://github.com/for-mainframe/Retrofit2-ZOSMF-Library.git'
-//                developerConnection 'scm:git:git@github.com:for-mainframe/Retrofit2-ZOSMF-Library.git'
-//            }
-//            developers {
-//                developer {
-//                    id 'formainframe'
-//                    name 'For Mainframe'
-//                    email 'formainframe@ibagroup.eu'
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//
-//model {
-//    tasks.generatePomFileForMavenJavaPublication {
-//        destination = file("$buildDir/generated-pom.xml")
-//    }
-//    tasks.publishMavenJavaPublicationToMavenLocal {
-//        dependsOn project.tasks.signArchives
-//    }
-//    tasks.publishMavenJavaPublicationToMavenRepository {
-//        dependsOn project.tasks.signArchives
-//    }
-//}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
+}
+
+signing {
+    sign configurations.archives
+    required {
+        // signing is required if this is a release version and the artifacts are to be published
+        !version.toString().endsWith('-SNAPSHOT') && tasks.withType(PublishToMavenRepository).find {
+            gradle.taskGraph.hasTask it
+        }
+    }
+    sign publishing.publications
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            customizePom(pom)
+            groupId 'eu.ibagroup'
+            artifactId 'r2z'
+            version projectVersion
+
+            from components.java
+
+
+            artifact(sourceJar) {
+                classifier = 'sources'
+            }
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}
+//какая-то неимоверная дичь
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            description 'Library that allows to perform http requests to IBM z/OSMF REST API with the help of Retorfit2.'
+            name 'Retrofit2-ZOSMF-Library'
+            url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library'
+
+            issueManagement {
+                system 'GitHub'
+                url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library/issues'
+            }
+            licenses {
+                license {
+                    name 'Apache License 2.0'
+                    url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library/blob/main/License'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library'
+                connection 'scm:git:git://github.com/for-mainframe/Retrofit2-ZOSMF-Library.git'
+                developerConnection 'scm:git:git@github.com:for-mainframe/Retrofit2-ZOSMF-Library.git'
+            }
+            developers {
+                developer {
+                    id 'formainframe'
+                    name 'For Mainframe'
+                    email 'formainframe@ibagroup.eu'
+                }
+            }
+        }
+    }
+}
+
+
+model {
+    tasks.generatePomFileForMavenJavaPublication {
+        destination = file("$buildDir/generated-pom.xml")
+    }
+    tasks.publishMavenJavaPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenJavaPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
+}
