@@ -1,9 +1,11 @@
+// Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
+
 import eu.ibagroup.r2z.BaseTest
 import eu.ibagroup.r2z.HoldJobRequestBody
 import eu.ibagroup.r2z.JESApi
 import eu.ibagroup.r2z.ReleaseJobRequestBody
-import ibagroup.eu.r2z.HoldJobRequest
-import ibagroup.eu.r2z.ReleaseJobRequest
+import eu.ibagroup.r2z.HoldJobRequest
+import eu.ibagroup.r2z.ReleaseJobRequest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import retrofit2.Call

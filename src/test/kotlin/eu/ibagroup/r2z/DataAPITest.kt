@@ -1,3 +1,5 @@
+// Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
+
 package eu.ibagroup.r2z
 
 import okhttp3.OkHttpClient
@@ -331,7 +333,7 @@ class DataAPITest {
   @Test
   fun testRetrieveUssFileContent() {
     val request =
-      dataAPI.retrieveUssFileContent(authorizationToken = basicCreds, filePath = "u/KIRYL/ijmp/niceCock.txt")
+      dataAPI.retrieveUssFileContent(authorizationToken = basicCreds, filePath = "u/KIRYL/ijmp/nice.txt")
     val response = request.execute()
     assert(response.isSuccessful)
     print(response.body())
@@ -342,7 +344,7 @@ class DataAPITest {
     val request = dataAPI.writeToUssFile(
       authorizationToken = basicCreds,
       filePath = "u/KIRYL/ijmp/readme2.md",
-      body = "Nice cock really!"
+      body = "Nice really!"
     )
     val response = request.execute()
     assert(response.isSuccessful)
@@ -366,7 +368,7 @@ class DataAPITest {
   fun testDeleteUssFile() {
     val request = dataAPI.deleteUssFile(
       authorizationToken = basicCreds,
-      filePath = "u/KIRYL/ijmp/niceCock.txt",
+      filePath = "u/KIRYL/ijmp/nice.txt",
     )
     val response = request.execute()
     assert(response.isSuccessful)

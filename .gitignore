@@ -1,4 +1,6 @@
-.idea
+.idea/*.xml
+.idea/modules
+.idea/.gitignore
 build
 gradle
 .gradle
