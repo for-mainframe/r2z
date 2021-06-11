@@ -1,3 +1,13 @@
+/*
+ * This program and the accompanying materials are made available under the terms of the
+ * Eclipse Public License v2.0 which accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-v20.html
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Copyright © 2021 IBA Group, a.s.
+ */
+
 package eu.ibagroup.r2z
 
 import org.junit.jupiter.api.*
@@ -9,20 +19,20 @@ import java.util.regex.Pattern
 class ListFilteredJobsTest : BaseTest() {
 
   var jobs: List<JobStatus> = emptyList()
-  var jesApi: JESApi = buildApi(BASE_URL, getUnsafeOkHttpClient())
+  var jesApi: JESApi = buildGsonApi(BASE_URL, getUnsafeOkHttpClient())
 
 
-  val JOB_ID = "JOB00440"
-  val USER_CORRELATOR = "MY_USER_CORRELATOR"
+  val JOB_ID = "JOB05569"
+  val USER_CORRELATOR = "J0006081S0W1....D9A8D97A.......:"
 
 
   @Test
   @Timeout(value = 3, unit = TimeUnit.SECONDS)
   fun getFilteredListByOwnerTest(){
 
-    val call = jesApi.getFilteredJobs( BASIC_AUTH_TOKEN,"VKRUS")
+    val call = jesApi.getFilteredJobs( BASIC_AUTH_TOKEN,"HLH")
     executeCallAndCheckResult(call){ job ->
-      Assertions.assertEquals(job.owner, "VKRUS")
+      Assertions.assertEquals(job.owner, "HLH")
     }
 
   }

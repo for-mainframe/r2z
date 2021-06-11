@@ -1,7 +1,19 @@
+/*
+ * This program and the accompanying materials are made available under the terms of the
+ * Eclipse Public License v2.0 which accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-v20.html
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Copyright © 2021 IBA Group, a.s.
+ */
+
 package eu.ibagroup.r2z
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import eu.ibagroup.r2z.annotations.AvailableSince
+import eu.ibagroup.r2z.annotations.ZVersion
 
 data class CreateDataset(
   @SerializedName("volser")
@@ -18,7 +30,7 @@ data class CreateDataset(
 
   @SerializedName("alcunit")
   @Expose
-  var allocationUnit : AllocationUnit,
+  var allocationUnit : AllocationUnit? = null,
 
   @SerializedName("primary")
   var primaryAllocation: Int,
@@ -43,7 +55,7 @@ data class CreateDataset(
   @Expose
   var recordLength: Int? = null,
 
-  @SerializedName("storeclass")
+  @SerializedName("storclass")
   @Expose
   var storageClass: String? = null,
 
@@ -53,8 +65,19 @@ data class CreateDataset(
 
   @SerializedName("dataclass")
   @Expose
-  var dataClass: String? = null
+  var dataClass: String? = null,
 
+  @SerializedName("avgblk")
+  var averageBlockLength: Int? = null,
+
+  @SerializedName("dsntype")
+  @Expose
+  var dsnType: DsnameType? = null,
+
+  @AvailableSince(ZVersion.ZOS_2_4)
+  @SerializedName("like")
+  @Expose
+  var datasetModel: String? = null
 )
 
 enum class AllocationUnit(private val type : String) {
@@ -62,6 +85,7 @@ enum class AllocationUnit(private val type : String) {
   TRK("TRK"),
   @SerializedName("CYL")
   CYL("CYL"),
+  @Deprecated("This one doesn't work in z/OSMF. Just to simplify For Mainframe plugin")
   @SerializedName("BLK")
   BLK("BLK");
 

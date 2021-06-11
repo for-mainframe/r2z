@@ -1,5 +1,17 @@
+/*
+ * This program and the accompanying materials are made available under the terms of the
+ * Eclipse Public License v2.0 which accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-v20.html
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Copyright © 2021 IBA Group, a.s.
+ */
+
 package eu.ibagroup.r2z
 
+import eu.ibagroup.r2z.annotations.AvailableSince
+import eu.ibagroup.r2z.annotations.ZVersion
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -352,7 +364,6 @@ interface DataAPI {
     @Query("research") research: String? = null,
     @Query("insensitive") insensitive: Boolean? = null,
     @Query("maxreturnsize") maxReturnSize: Int? = null
-
   ): Call<String>
 
   @PUT("/zosmf/restfiles/fs/{filepath-name}")
@@ -452,7 +463,6 @@ enum class XIBMOption(private val type: String = "recursive") {
 }
 
 
-
 enum class XIBMObtainENQ(private val type: String) {
 
   EXCL("excl"),
@@ -494,14 +504,27 @@ data class XIBMRecordRange(private val format: Format, private val sss: Int, pri
 
 }
 
-enum class XIBMDataType(private val type: String) {
+private const val codePagePrefix = "IBM-"
 
-  TEXT("text"),
-  BINARY("binary"),
-  RECORD("record");
+enum class CodePage(val codePage: String) {
+  IBM_1025("${codePagePrefix}1025"),
+  IBM_1047("${codePagePrefix}1047")
+}
+
+data class XIBMDataType(
+  val type: Type,
+  @AvailableSince(ZVersion.ZOS_2_4) val encoding: CodePage? = null
+) {
+
+  enum class Type(val value: String) {
+    TEXT("text"),
+    BINARY("binary"),
+    RECORD("record")
+  }
+
 
   override fun toString(): String {
-    return type
+    return if (encoding != null) "${type.value};fileEncoding=${encoding.codePage}" else type.value
   }
 
 

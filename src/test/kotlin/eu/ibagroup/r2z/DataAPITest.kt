@@ -1,3 +1,13 @@
+/*
+ * This program and the accompanying materials are made available under the terms of the
+ * Eclipse Public License v2.0 which accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-v20.html
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Copyright © 2021 IBA Group, a.s.
+ */
+
 package eu.ibagroup.r2z
 
 import okhttp3.OkHttpClient
@@ -6,7 +16,7 @@ import org.junit.jupiter.api.Test
 
 class DataAPITest {
 
-  private val dataAPI = buildApi<DataAPI>(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient)
+  private val dataAPI = buildGsonApi<DataAPI>(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient)
   private val infoAPI = buildApi<InfoAPI>(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient)
 
   @Test
@@ -44,8 +54,9 @@ class DataAPITest {
   fun testListUss() {
     val request = dataAPI.listUssPath(
       authorizationToken = basicCreds,
-      path = "/u/KIRYL",
-      depth = 3
+      path = "/u/CHP/test-env/test-files/testprog-jcl",
+      depth = 1,
+      followSymlinks = SymlinkMode.REPORT
     )
     val response = request.execute()
     response.body()?.items?.forEach {
@@ -330,7 +341,7 @@ class DataAPITest {
   @Test
   fun testRetrieveUssFileContent() {
     val request =
-      dataAPI.retrieveUssFileContent(authorizationToken = basicCreds, filePath = "u/KIRYL/ijmp/niceCock.txt")
+      dataAPI.retrieveUssFileContent(authorizationToken = basicCreds, filePath = "u/KIRYL/ijmp/nice.txt")
     val response = request.execute()
     assert(response.isSuccessful)
     print(response.body())
@@ -341,7 +352,7 @@ class DataAPITest {
     val request = dataAPI.writeToUssFile(
       authorizationToken = basicCreds,
       filePath = "u/KIRYL/ijmp/readme2.md",
-      body = "Nice cock really!"
+      body = "Nice really!"
     )
     val response = request.execute()
     assert(response.isSuccessful)
@@ -365,7 +376,7 @@ class DataAPITest {
   fun testDeleteUssFile() {
     val request = dataAPI.deleteUssFile(
       authorizationToken = basicCreds,
-      filePath = "u/KIRYL/ijmp/niceCock.txt",
+      filePath = "u/KIRYL/ijmp/nice.txt",
     )
     val response = request.execute()
     assert(response.isSuccessful)
