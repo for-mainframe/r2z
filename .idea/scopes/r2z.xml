@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="r2z" pattern="src[zosmf-retrofit2.main]:eu.ibagroup.r2z..*||src[zosmf-retrofit2.main]:eu.ibagroup.r2z.annotations..*" />
+</component>

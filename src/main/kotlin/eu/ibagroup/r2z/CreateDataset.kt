@@ -1,7 +1,11 @@
+// Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
+
 package eu.ibagroup.r2z
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import eu.ibagroup.r2z.annotations.AvailableSince
+import eu.ibagroup.r2z.annotations.ZVersion
 
 data class CreateDataset(
   @SerializedName("volser")
@@ -18,7 +22,7 @@ data class CreateDataset(
 
   @SerializedName("alcunit")
   @Expose
-  var allocationUnit : AllocationUnit,
+  var allocationUnit : AllocationUnit? = null,
 
   @SerializedName("primary")
   var primaryAllocation: Int,
@@ -43,7 +47,7 @@ data class CreateDataset(
   @Expose
   var recordLength: Int? = null,
 
-  @SerializedName("storeclass")
+  @SerializedName("storclass")
   @Expose
   var storageClass: String? = null,
 
@@ -53,8 +57,19 @@ data class CreateDataset(
 
   @SerializedName("dataclass")
   @Expose
-  var dataClass: String? = null
+  var dataClass: String? = null,
 
+  @SerializedName("avgblk")
+  var averageBlockLength: Int? = null,
+
+  @SerializedName("dsntype")
+  @Expose
+  var dsnType: DsnameType? = null,
+
+  @AvailableSince(ZVersion.ZOS_2_4)
+  @SerializedName("like")
+  @Expose
+  var datasetModel: String? = null
 )
 
 enum class AllocationUnit(private val type : String) {
@@ -62,6 +77,7 @@ enum class AllocationUnit(private val type : String) {
   TRK("TRK"),
   @SerializedName("CYL")
   CYL("CYL"),
+  @Deprecated("This one doesn't work in z/OSMF. Just to simplify For Mainframe plugin")
   @SerializedName("BLK")
   BLK("BLK");
 

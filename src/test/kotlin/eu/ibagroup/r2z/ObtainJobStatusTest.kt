@@ -1,3 +1,5 @@
+// Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
+
 package eu.ibagroup.r2z
 
 import org.junit.jupiter.api.Assertions
@@ -10,15 +12,15 @@ class ObtainJobStatusTest : BaseTest() {
 
   var jesApi: JESApi = buildGsonApi(BASE_URL, getUnsafeOkHttpClient())
 
-  val JOB_CORRELATOR = "J0000440S0W1....D92237DC.......:"
-  val JOB_ID = "JOB00440"
+  val JOB_CORRELATOR = "J0006081S0W1....D9A8D97A.......:"
+  val JOB_ID = "JOB05569"
   val JOB_NAME = "NOTHINGJ"
 
 
 
   @Test
   fun obtainStatusByNameAndIdTest() {
-    val call = jesApi.getJobStatus(BASIC_AUTH_TOKEN, JOB_NAME, JOB_ID, UseStepData.ENABLE)
+    val call = jesApi.getJobStatus(BASIC_AUTH_TOKEN, JOB_NAME, JOB_ID, UseStepData.DISABLE)
     executeCallAndCheckResult(call)
   }
 
@@ -39,7 +41,7 @@ class ObtainJobStatusTest : BaseTest() {
       }
 
       Assertions.assertNotNull(jobStatus.owner)
-      Assertions.assertEquals(jobStatus.owner.toLowerCase(), "vkrus")
+      Assertions.assertEquals(jobStatus.owner.toLowerCase(), "hlh")
 
     } else {
       println(response.errorBody())

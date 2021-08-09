@@ -2,12 +2,11 @@
 
 package eu.ibagroup.r2z
 
-import retrofit2.Call
-import retrofit2.http.GET
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-interface InfoAPI {
-
-  @GET("zosmf/info")
-  fun getSystemInfo() : Call<InfoResponse>
-
-}
+data class SubmitFileNameBody (
+    @SerializedName("file")
+    @Expose
+    var file: String
+)

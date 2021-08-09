@@ -1,3 +1,5 @@
+// Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
+
 package eu.ibagroup.r2z
 
 import com.google.gson.annotations.Expose
@@ -15,11 +17,11 @@ data class UssFile(
 
   @SerializedName("size")
   @Expose
-  val size: Int? = null,
+  val size: Long? = null,
 
   @SerializedName("uid")
   @Expose
-  val uid: Int? = null,
+  val uid: Long? = null,
 
   @SerializedName("user")
   @Expose
@@ -27,7 +29,7 @@ data class UssFile(
 
   @SerializedName("gid")
   @Expose
-  val gid: Int? = null,
+  val gid: Long? = null,
 
   @SerializedName("group")
   @Expose
