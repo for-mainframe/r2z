@@ -15,9 +15,7 @@ class BytesConverterFactory : Converter.Factory() {
   ): Converter<ResponseBody, *>? {
     if (getRawType(type) !== ByteArray::class.java) return null
 
-    return Converter<ResponseBody, ByteArray>{responseBody:ResponseBody->
-      responseBody.byteStream().readAllBytes()
-    }
+    return Converter { it.byteStream().readBytes() }
   }
   companion object Factory {
     fun create(): BytesConverterFactory = BytesConverterFactory()
