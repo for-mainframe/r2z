@@ -32,3 +32,21 @@ fun <API> buildApi(baseUrl: String, httpClient: OkHttpClient, apiClass: Class<ou
     .build()
   return retrofit.create(apiClass)
 }
+
+inline fun <reified Api> buildApiWithBytesConverter(baseUrl: String, httpClient: OkHttpClient): Api {
+  val retrofit = Retrofit.Builder()
+    .baseUrl(baseUrl)
+    .addConverterFactory(BytesConverterFactory.create())
+    .client(httpClient)
+    .build()
+  return retrofit.create(Api::class.java)
+}
+
+fun <API> buildApiWithBytesConverter(baseUrl: String, httpClient: OkHttpClient, apiClass: Class<out API>): API {
+  val retrofit = Retrofit.Builder()
+    .baseUrl(baseUrl)
+    .addConverterFactory(BytesConverterFactory.create())
+    .client(httpClient)
+    .build()
+  return retrofit.create(apiClass)
+}
