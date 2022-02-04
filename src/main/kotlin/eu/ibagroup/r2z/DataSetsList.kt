@@ -20,7 +20,7 @@ data class DataSetsList(
 
   @SerializedName("moreRows")
   @Expose
-  val moreRows: Int? = null,
+  val moreRows: Boolean? = null,
 
   @SerializedName("JSONversion")
   @Expose
