@@ -4,6 +4,7 @@ package eu.ibagroup.r2z
 
 import eu.ibagroup.r2z.annotations.AvailableSince
 import eu.ibagroup.r2z.annotations.ZVersion
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -351,18 +352,21 @@ interface DataAPI {
     @Header("Range") range: Int? = null,
     @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
+    @Header("Accept-Encoding") acceptEncoding: String? = "gzip",
     @Path("filepath-name") filePath: String,
     @Query("search") search: String? = null,
     @Query("research") research: String? = null,
     @Query("insensitive") insensitive: Boolean? = null,
     @Query("maxreturnsize") maxReturnSize: Int? = null
-  ): Call<String>
+  ): Call<ResponseBody>
 
   @PUT("/zosmf/restfiles/fs/{filepath-name}")
   fun writeToUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifNoneMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
+    @Header("Accept-Encoding") acceptEncoding: String? = "gzip",
+    @Header("Content-Type") contentType: String? = null,
     @Path("filepath-name") filePath: String,
     @Body body: String
   ): Call<Void>
