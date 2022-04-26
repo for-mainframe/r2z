@@ -43,6 +43,7 @@ data class InfoResponse (
     "04.25.00" -> ZVersion.ZOS_2_2
     "04.26.00" -> ZVersion.ZOS_2_3
     "04.27.00" -> ZVersion.ZOS_2_4
+    "04.28.00" -> ZVersion.ZOS_2_5
     else -> ZVersion.ZOS_2_1
   }
 }

@@ -35,6 +35,7 @@ data class SystemsResponse(
             "V2R2" -> ZVersion.ZOS_2_2
             "V2R3" -> ZVersion.ZOS_2_3
             "V2R4" -> ZVersion.ZOS_2_4
+            "V2R5" -> ZVersion.ZOS_2_5
             else -> ZVersion.ZOS_2_1
         }
     }
