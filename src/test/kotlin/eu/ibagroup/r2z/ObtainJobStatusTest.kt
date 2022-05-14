@@ -35,7 +35,7 @@ class ObtainJobStatusTest : BaseTest() {
     val response = call.execute()
     if (response.isSuccessful) {
       val jobStatus = response.body() as JobStatus
-      jobStatus.steps?.forEach { el ->
+      jobStatus.steps.forEach { el ->
         println(el)
 
       }
