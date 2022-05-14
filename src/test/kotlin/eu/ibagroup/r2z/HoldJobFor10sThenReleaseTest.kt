@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 class HoldFor20sThenReleaseJobTest : BaseTest() {
     val JOB_ID = "JOB06152"
@@ -49,10 +50,10 @@ class HoldFor20sThenReleaseJobTest : BaseTest() {
         val response = call.execute()
         if (response.isSuccessful) {
             val jobStatus: HoldJobRequest = response.body() as HoldJobRequest
-            println(jobStatus!!.status)
+            println(jobStatus.status)
             Assertions.assertEquals(SUCCESSFUL_REQUEST_RESULT, jobStatus.status)
-            Assertions.assertNotNull(jobStatus!!.owner)
-            Assertions.assertEquals(jobStatus!!.owner?.toLowerCase(), "hlh")
+            Assertions.assertNotNull(jobStatus.owner)
+            Assertions.assertEquals(jobStatus.owner?.lowercase(Locale.getDefault()), "hlh")
         } else {
             println(response.errorBody())
             Assertions.assertTrue(false)
@@ -63,10 +64,10 @@ class HoldFor20sThenReleaseJobTest : BaseTest() {
         val response = call.execute()
         if (response.isSuccessful) {
             val jobStatus: ReleaseJobRequest = response.body() as ReleaseJobRequest
-            println(jobStatus!!.status)
+            println(jobStatus.status)
             Assertions.assertEquals(SUCCESSFUL_REQUEST_RESULT, jobStatus.status)
-            Assertions.assertNotNull(jobStatus!!.owner)
-            Assertions.assertEquals(jobStatus!!.owner?.toLowerCase(), "hlh")
+            Assertions.assertNotNull(jobStatus.owner)
+            Assertions.assertEquals(jobStatus.owner?.lowercase(Locale.getDefault()), "hlh")
         } else {
             println(response.errorBody())
             Assertions.assertTrue(false)
