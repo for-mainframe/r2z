@@ -40,10 +40,10 @@ class CancelJobAndPurgeOutputTest : BaseTest() {
         if (response.isSuccessful)
         {
             val jobStatus: CancelJobPurgeOutRequest = response.body() as CancelJobPurgeOutRequest
-            println(jobStatus!!.status)
+            println(jobStatus.status)
             Assertions.assertEquals(SUCCESSFUL_REQUEST_RESULT, jobStatus.status)
-            Assertions.assertNotNull(jobStatus!!.owner)
-            Assertions.assertEquals(jobStatus!!.owner?.toLowerCase(), "hlh")
+            Assertions.assertNotNull(jobStatus.owner)
+            Assertions.assertEquals(jobStatus.owner?.toLowerCase(), "hlh")
         } else
         {
             println(response.errorBody())

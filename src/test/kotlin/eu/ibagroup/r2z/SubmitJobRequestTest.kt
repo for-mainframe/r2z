@@ -55,11 +55,11 @@ class SubmitJobRequestTest : BaseTest() {
         val response = call.execute()
         if (response.isSuccessful) {
             val jobStatus: SubmitJobRequest = response.body() as SubmitJobRequest
-            println(jobStatus!!.jobid)
-            println(jobStatus!!.jobname)
-            println(jobStatus!!.status)
-            Assertions.assertNotNull(jobStatus!!.owner)
-            Assertions.assertEquals(jobStatus!!.owner?.toLowerCase(), "hlh")
+            println(jobStatus.jobid)
+            println(jobStatus.jobname)
+            println(jobStatus.status)
+            Assertions.assertNotNull(jobStatus.owner)
+            Assertions.assertEquals(jobStatus.owner?.toLowerCase(), "hlh")
         } else {
             println(response.errorBody())
             Assertions.assertTrue(false)
