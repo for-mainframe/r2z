@@ -13,14 +13,15 @@ interface TsoApi {
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
     @Query("proc") proc: String,
     @Query("chset") chset: String,
-    @Query("cpage") cpage: CodePage,
+    @Query("cpage") cpage: TsoCodePage,
     @Query("rows") rows: Int,
     @Query("cols") cols: Int,
     @Query("acct") acct: String? = null,
     @Query("ugrp") ugrp: String? = null,
     @Query("rsize") rsize: Int? = null,
-    @Query("appsessid") appsessid: String? = null
-  ): Call<Void>
+    @Query("appsessid") appsessid: String? = null,
+    @Query("system") system: String? = null,
+  ): Call<TsoResponse>
 
   @PUT("/zosmf/tsoApp/tso/{servletKey}")
   fun sendMessageToTso(
@@ -28,8 +29,8 @@ interface TsoApi {
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
     @Body body: TsoData,
     @Path("servletKey") servletKey: String,
-    @Query("readReply") readReply: Boolean? = null
-  ): Call<Void>
+    @Query("readReply") readReply: Boolean? = null,
+  ): Call<TsoResponse>
 
   @GET("/zosmf/tsoApp/tso/{servletKey}")
   fun receiveMessagesFromTso(
@@ -43,7 +44,7 @@ interface TsoApi {
     @Header("Authorization") authorizationToken: String,
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
     @Path("servletKey") servletKey: String,
-    @Query("tsoforcecancel") tsoForceCancel: Boolean? = null
+    @Query("tsoforcecancel") tsoForceCancel: Boolean? = null,
   ): Call<TsoResponse>
 
 }
