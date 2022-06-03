@@ -8,21 +8,26 @@ class TsoApiTest: BaseTest() {
 
   private val tsoApi = buildGsonApi<TsoApi>(BASE_URL, UnsafeOkHttpClient.unsafeOkHttpClient)
 
+  //You need to use the real servlet key
+  //that was received in the body of the response to the startTso request
+  private val servletKey = "MENTEE4-83-aabyaaad"
+
   @Test
   fun startTso() {
-
     val request = tsoApi.startTso(
       authorizationToken = BASIC_AUTH_TOKEN,
       proc = "IKJACCNT",
       chset = "697",
-      cpage = CodePage.IBM_1047,
+      cpage = TsoCodePage.IBM_1047,
       rows = 204,
       cols = 160,
       rsize = 50000,
-      acct = "DEFAULT"
+      acct = "IZUACCT"
     )
     val response = request.execute()
-    assert(response.code()== 200)
+    assert(response.code() == 200)
+    val body = response.body() as TsoResponse
+    assert(body.servletKey?.matches(Regex("${System.getenv("ZOSMF_TEST_USERNAME")}.*")) == true)
   }
 
   @Test
@@ -30,35 +35,37 @@ class TsoApiTest: BaseTest() {
     val request = tsoApi.sendMessageToTso(
       authorizationToken = BASIC_AUTH_TOKEN,
       body = TsoData(
-        messageType = MessageType(version = "JSON", dataType = "DATA")
+        tsoResponse = MessageType(version = "JSON", data = "DATA")
       ),
-      servletKey = "key"
+      servletKey = servletKey
     )
     val response = request.execute()
-    assert(response.code()== 200)
+    assert(response.code() == 200)
+    val body = response.body() as TsoResponse
+    assert(body.servletKey == servletKey)
   }
 
   @Test
   fun receiveMessagesFromTso() {
     val request = tsoApi.receiveMessagesFromTso(
       authorizationToken = BASIC_AUTH_TOKEN,
-      servletKey = "key"
+      servletKey = servletKey
     )
     val response = request.execute()
-    assert(response.code()== 200)
+    assert(response.code() == 200)
     val body = response.body() as TsoResponse
-    assert(body.servletKey == "key")
+    assert(body.servletKey == servletKey)
   }
 
   @Test
   fun endTso() {
     val request = tsoApi.endTso(
       authorizationToken = BASIC_AUTH_TOKEN,
-      servletKey = "key"
+      servletKey = servletKey
     )
     val response = request.execute()
     assert(response.code() == 200)
     val body = response.body() as TsoResponse
-    assert(body.servletKey == "key")
+    assert(body.servletKey == servletKey)
   }
 }
