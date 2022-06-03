@@ -10,7 +10,7 @@ import java.util.regex.Pattern
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ListFilteredJobsTest : BaseTest() {
 
-  var jobs: List<JobStatus> = emptyList()
+  var jobs: List<Job> = emptyList()
   var jesApi: JESApi = buildGsonApi(BASE_URL, getUnsafeOkHttpClient())
 
 
@@ -65,10 +65,10 @@ class ListFilteredJobsTest : BaseTest() {
     }
   }
 
-  fun executeCallAndCheckResult(call: Call<List<JobStatus>>, size: Int? = null, checkForAssertionFun: (job: JobStatus) -> Unit) {
+  fun executeCallAndCheckResult(call: Call<List<Job>>, size: Int? = null, checkForAssertionFun: (job: Job) -> Unit) {
     val response = call.execute()
     if (response.isSuccessful) {
-      jobs = response.body() as List<JobStatus>
+      jobs = response.body() as List<Job>
       if(size!=null) Assertions.assertEquals(jobs.size, size)
       jobs.forEach(checkForAssertionFun)
 

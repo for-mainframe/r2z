@@ -15,6 +15,7 @@ interface DataAPI {
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Attributes") xIBMAttr: XIBMAttr = XIBMAttr(),
     @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
+    @Header("X-IBM-Response-Timeout") xIBMResponseTimeout: String? = null,
     @Query("dslevel") dsLevel: String,
     @Query("volser") volser: String? = null,
     @Query("start") start: String? = null
@@ -66,7 +67,7 @@ interface DataAPI {
     @Query("research") research: String? = null,
     @Query("insensitive") insensitive: Boolean? = null,
     @Query("maxreturnsize") maxReturnSize: Int? = null
-  ): Call<String>
+  ): Call<ResponseBody>
 
   @GET("/zosmf/restfiles/ds/{dataset-name}({member-name})")
   fun retrieveMemberContent(
@@ -104,7 +105,7 @@ interface DataAPI {
     @Query("research") research: String? = null,
     @Query("insensitive") insensitive: Boolean? = null,
     @Query("maxreturnsize") maxReturnSize: Int? = null
-  ): Call<String>
+  ): Call<ResponseBody>
 
   @GET("/zosmf/restfiles/ds/-({volser})/{dataset-name}({member-name})")
   fun retrieveMemberContent(

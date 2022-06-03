@@ -1,0 +1,267 @@
+{
+  "items": [
+    {
+      "member": "$$$COIBM"
+    },
+    {
+      "member": "ANFWPROC"
+    },
+    {
+      "member": "AOPDEMON"
+    },
+    {
+      "member": "AOPPRINT"
+    },
+    {
+      "member": "AOPSTART"
+    },
+    {
+      "member": "AOPSTAR2"
+    },
+    {
+      "member": "AOPSTAT"
+    },
+    {
+      "member": "AOPSTOP"
+    },
+    {
+      "member": "AOPSTOP2"
+    },
+    {
+      "member": "APIJPJCL"
+    },
+    {
+      "member": "APPC"
+    },
+    {
+      "member": "ASCH"
+    },
+    {
+      "member": "ASCHINT"
+    },
+    {
+      "member": "ASMAC"
+    },
+    {
+      "member": "ASMACG"
+    },
+    {
+      "member": "ASMACL"
+    },
+    {
+      "member": "ASMACLG"
+    },
+    {
+      "member": "AVM"
+    },
+    {
+      "member": "AXRNN"
+    },
+    {
+      "member": "AXRPSTRT"
+    },
+    {
+      "member": "BCDPROC"
+    },
+    {
+      "member": "BLSJIPCS"
+    },
+    {
+      "member": "BLSJPRMI"
+    },
+    {
+      "member": "BPXAS"
+    },
+    {
+      "member": "BPXOINIT"
+    },
+    {
+      "member": "CBDJCMPR"
+    },
+    {
+      "member": "CBDJIMPT"
+    },
+    {
+      "member": "CBDJIOCP"
+    },
+    {
+      "member": "CBDJRPTS"
+    },
+    {
+      "member": "CBDJXMIT"
+    },
+    {
+      "member": "CBDQAJSK"
+    },
+    {
+      "member": "CBDQDISP"
+    },
+    {
+      "member": "CEA"
+    },
+    {
+      "member": "CFZCIM"
+    },
+    {
+      "member": "CVAFTR"
+    },
+    {
+      "member": "DEALLOC"
+    },
+    {
+      "member": "DEVMAN"
+    },
+    {
+      "member": "DFM"
+    },
+    {
+      "member": "DLF"
+    },
+    {
+      "member": "DUMPSRV"
+    },
+    {
+      "member": "GPMSERVE"
+    },
+    {
+      "member": "GPM4CIM"
+    },
+    {
+      "member": "GTF"
+    },
+    {
+      "member": "GTZ"
+    },
+    {
+      "member": "HIS"
+    },
+    {
+      "member": "HKCSVR1"
+    },
+    {
+      "member": "HLASMC"
+    },
+    {
+      "member": "HLASMCG"
+    },
+    {
+      "member": "HLASMCL"
+    },
+    {
+      "member": "HLASMCLG"
+    },
+    {
+      "member": "HWISTART"
+    },
+    {
+      "member": "HZR"
+    },
+    {
+      "member": "HZSPROC"
+    },
+    {
+      "member": "ICEOPT"
+    },
+    {
+      "member": "IDAVDT"
+    },
+    {
+      "member": "IEESYSAS"
+    },
+    {
+      "member": "IEEVMPCR"
+    },
+    {
+      "member": "IFGEDI"
+    },
+    {
+      "member": "IFGOCETR"
+    },
+    {
+      "member": "IKYSPROC"
+    },
+    {
+      "member": "INIT"
+    },
+    {
+      "member": "IPCS"
+    },
+    {
+      "member": "IQPPCIE"
+    },
+    {
+      "member": "IXGLOGRS"
+    },
+    {
+      "member": "IZUANG1"
+    },
+    {
+      "member": "IZUFPROC"
+    },
+    {
+      "member": "IZUINSTP"
+    },
+    {
+      "member": "IZUSVR1"
+    },
+    {
+      "member": "LINKS"
+    },
+    {
+      "member": "LKED"
+    },
+    {
+      "member": "LKEDG"
+    },
+    {
+      "member": "LLA"
+    },
+    {
+      "member": "LOGROUTE"
+    },
+    {
+      "member": "OMVS"
+    },
+    {
+      "member": "PCIE"
+    },
+    {
+      "member": "PKISERVD"
+    },
+    {
+      "member": "RACF"
+    },
+    {
+      "member": "RDR"
+    },
+    {
+      "member": "RDR3200"
+    },
+    {
+      "member": "RDR400"
+    },
+    {
+      "member": "RMF"
+    },
+    {
+      "member": "RMFCSC"
+    },
+    {
+      "member": "RMFGAT"
+    },
+    {
+      "member": "RMFM3B"
+    },
+    {
+      "member": "RMTGEN"
+    },
+    {
+      "member": "VLF"
+    },
+    {
+      "member": "XWTR"
+    }
+  ],
+  "returnedRows": 87,
+  "JSONversion": 1
+}
