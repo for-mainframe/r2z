@@ -11,7 +11,7 @@ import java.lang.IllegalArgumentException
 interface JESApi {
 
   @GET("/zosmf/restjobs/jobs/{job-name}/{job-id}")
-  fun getJobStatus(
+  fun getJob(
     @Header("Authorization") basicCredentials: String,
     @Path("job-name") jobName: String,
     @Path("job-id") jobId: String,
@@ -19,16 +19,16 @@ interface JESApi {
     @Query("step-data") useStepData: UseStepData = UseStepData.DISABLE,
     @AvailableSince(ZVersion.ZOS_2_4)
     @Query("exec-data") execData: ExecData? = null
-  ): Call<JobStatus>
+  ): Call<Job>
 
   @GET("/zosmf/restjobs/jobs/{job-correlator}")
-  fun getJobStatus(
+  fun getJob(
     @Header("Authorization") basicCredentials: String,
     @Path("job-correlator") jobCorrelator: String,
     @Query("step-data") useStepData: UseStepData = UseStepData.DISABLE,
     @AvailableSince(ZVersion.ZOS_2_4)
     @Query("exec-data") execData: ExecData? = null
-  ): Call<JobStatus>
+  ): Call<Job>
 
   @GET("/zosmf/restjobs/jobs")
   fun getFilteredJobs(
@@ -42,7 +42,7 @@ interface JESApi {
     @Query("exec-data") execData: ExecData? = null,
     @AvailableSince(ZVersion.ZOS_2_4)
     @Query("status") status: ActiveStatus? = null
-  ): Call<List<JobStatus>>
+  ): Call<List<Job>>
 
   @GET("/zosmf/restjobs/jobs/{job-name}/{job-id}/files")
   fun getJobSpoolFiles(

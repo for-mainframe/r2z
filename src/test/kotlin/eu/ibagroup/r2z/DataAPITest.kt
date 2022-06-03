@@ -2,7 +2,6 @@
 
 package eu.ibagroup.r2z
 
-import okhttp3.OkHttpClient
 import org.junit.jupiter.api.Test
 
 
