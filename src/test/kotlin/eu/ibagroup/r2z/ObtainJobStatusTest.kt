@@ -20,21 +20,21 @@ class ObtainJobStatusTest : BaseTest() {
 
   @Test
   fun obtainStatusByNameAndIdTest() {
-    val call = jesApi.getJobStatus(BASIC_AUTH_TOKEN, JOB_NAME, JOB_ID, UseStepData.DISABLE)
+    val call = jesApi.getJob(BASIC_AUTH_TOKEN, JOB_NAME, JOB_ID, UseStepData.DISABLE)
     executeCallAndCheckResult(call)
   }
 
   @Test
   fun obtainStatusByCorrelator() {
-    val call = jesApi.getJobStatus(BASIC_AUTH_TOKEN, JOB_CORRELATOR)
+    val call = jesApi.getJob(BASIC_AUTH_TOKEN, JOB_CORRELATOR)
     executeCallAndCheckResult(call)
   }
 
 
-  fun executeCallAndCheckResult(call: Call<JobStatus>) {
+  fun executeCallAndCheckResult(call: Call<Job>) {
     val response = call.execute()
     if (response.isSuccessful) {
-      val jobStatus = response.body() as JobStatus
+      val jobStatus = response.body() as Job
       jobStatus.steps?.forEach { el ->
         println(el)
 
