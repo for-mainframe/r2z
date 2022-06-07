@@ -229,4 +229,93 @@ class GetJobsTest {
 
     responseDispatcher.clearValidationList()
   }
+
+  @Test
+  fun getSpoolFilesCommon() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files")) == true
+      },
+      {
+        MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles")).setResponseCode(200)
+      }
+    )
+    val spoolFiles = getJobs.getSpoolFilesCommon(CommonJobParams(jobName = "NBEL", jobId = "TSU00555"))
+    spoolFiles.forEach {
+      Assertions.assertEquals("NBEL", it.jobname)
+      Assertions.assertEquals("TSU00555", it.jobId)
+    }
+
+    responseDispatcher.clearValidationList()
+  }
+
+  @Test
+  fun getSpoolFilesForJob() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files")) == true
+      },
+      {
+        MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles")).setResponseCode(200)
+      }
+    )
+    val spooFiles = getJobs.getSpoolFilesForJob(Job(
+      jobId = "TSU00555",
+      jobName = "NBEL",
+      subSystem = "JES2",
+      owner = "NBEL",
+      type = Job.JobType.TSU,
+      url = "https://host:port/zosmf/restjobs/jobs/T0000555S0W1....DB9E6D9D.......%3A",
+      filesUrl = "https://host:port/zosmf/restjobs/jobs/T0000555S0W1....DB9E6D9D.......%3A/files",
+      phase = 14,
+      phaseName = "Job is actively executing"
+    ))
+    spooFiles.forEach {
+      Assertions.assertEquals("NBEL", it.jobname)
+      Assertions.assertEquals("TSU00555", it.jobId)
+    }
+
+    responseDispatcher.clearValidationList()
+  }
+
+  @Test
+  fun getJclCommon() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    val responseBody = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records\\?mode=text")) == true
+      },
+      {
+        MockResponse().setBody(responseBody).setResponseCode(200)
+      }
+    )
+    val jcl = getJobs.getJclCommon(CommonJobParams(jobName = "NBEL", jobId = "TSU00555"))
+    Assertions.assertEquals(jcl.contains("NBEL"), true)
+    Assertions.assertEquals(jcl.contains("TSU00555"), true)
+  }
+
+  @Test
+  fun getJcl() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    val responseBody = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records\\?mode=text")) == true
+      },
+      {
+        MockResponse().setBody(responseBody).setResponseCode(200)
+      }
+    )
+    val jcl = getJobs.getJcl(jobName = "NBEL", jobId = "TSU00555")
+    Assertions.assertEquals(jcl.contains("NBEL"), true)
+    Assertions.assertEquals(jcl.contains("TSU00555"), true)
+  }
+
 }
