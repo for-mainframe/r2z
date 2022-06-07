@@ -1,0 +1,3 @@
+//NBEL     JOB 'IZUACCT',                                               TSU00555
+//             REGION=65536K
+//IZUFPROC EXEC IZUFPROC
