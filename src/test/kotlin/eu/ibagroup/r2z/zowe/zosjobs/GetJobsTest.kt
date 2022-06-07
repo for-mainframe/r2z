@@ -300,4 +300,22 @@ class GetJobsTest {
     Assertions.assertEquals(jcl.contains("TSU00555"), true)
   }
 
+  @Test
+  fun getJcl() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    val responseBody = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records\\?mode=text")) == true
+      },
+      {
+        MockResponse().setBody(responseBody).setResponseCode(200)
+      }
+    )
+    val jcl = getJobs.getJcl(jobName = "NBEL", jobId = "TSU00555")
+    Assertions.assertEquals(jcl.contains("NBEL"), true)
+    Assertions.assertEquals(jcl.contains("TSU00555"), true)
+  }
+
 }

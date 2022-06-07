@@ -186,6 +186,7 @@ class GetJobs(
    * @return list of SpoolFile objects
    * @throws Exception error on getting spool files info
    */
+  @Suppress("UNCHECKED_CAST")
   fun getSpoolFilesCommon(params: CommonJobParams): List<SpoolFile> {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val jesApi = buildApi<JESApi>(url, httpClient)
@@ -220,6 +221,13 @@ class GetJobs(
     return getSpoolFilesCommon(CommonJobParams(jobId = job.jobId, jobName = job.jobName))
   }
 
+  /**
+   * Get the JCL that was used to submit a job.
+   *
+   * @param params common job parameters, see CommonJobParams object
+   * @return JCL content
+   * @throws Exception error on getting jcl content
+   */
   fun getJclCommon(params: CommonJobParams): String {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val jesApi = buildApiWithBytesConverter<JESApi>(url, httpClient)
@@ -235,6 +243,14 @@ class GetJobs(
     return String(response?.body() as ByteArray? ?: throw Exception("No body returned"))
   }
 
+  /**
+   * Get JCL from a job.
+   *
+   * @param jobName job name for the job for which you want to retrieve JCL
+   * @param jobId   job ID for the job for which you want to retrieve JCL
+   * @return job document on resolve
+   * @throws Exception error on getting jcl content
+   */
   fun getJcl(jobName: String, jobId: String): String {
     return getJclCommon(CommonJobParams(jobName = jobName, jobId = jobId))
   }
