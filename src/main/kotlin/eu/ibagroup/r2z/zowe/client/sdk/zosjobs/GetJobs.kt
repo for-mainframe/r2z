@@ -222,7 +222,7 @@ class GetJobs(
 
   fun getJclCommon(params: CommonJobParams): String {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
-    val jesApi = buildApi<JESApi>(url, httpClient)
+    val jesApi = buildApiWithBytesConverter<JESApi>(url, httpClient)
     val call = jesApi.getJCLRecords(
       basicCredentials = Credentials.basic(connection.user, connection.password),
       jobName = params.jobName,
