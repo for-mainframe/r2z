@@ -374,6 +374,7 @@ interface DataAPI {
   @POST("/zosmf/restfiles/fs/{filepath-name}")
   fun createUssFile(
     @Header("Authorization") authorizationToken: String,
+    @Header("X-IBM-Override-Umask") xIBMOverrideUmask: Boolean = true,
     @Path("filepath-name") filePath: FilePath,
     @Body body: CreateUssFile
   ): Call<Void>
