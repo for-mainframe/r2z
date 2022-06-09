@@ -1,8 +1,9 @@
 .idea/*.xml
+.idea/*.iml
 .idea/modules
 .idea/.gitignore
 build
 gradle
 .gradle
-.vscode
 bin
+.vscode
