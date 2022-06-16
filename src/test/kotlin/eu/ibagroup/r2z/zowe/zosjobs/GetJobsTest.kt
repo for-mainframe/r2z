@@ -108,6 +108,7 @@ class GetJobsTest {
     responseDispatcher.clearValidationList()
   }
 
+  @Test
   fun getJobs() {
     val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
     val getJobs = GetJobs(connection, proxyClient)
@@ -173,6 +174,53 @@ class GetJobsTest {
     Assertions.assertEquals("OUTPUT", status)
 
     responseDispatcher.clearValidationList()
+  }
+
+  @Test
+  fun getStatus() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.*")) == true
+      },
+      {
+        MockResponse().setBody(responseDispatcher.readMockJson("getStatus")).setResponseCode(200)
+      }
+    )
+    val job = getJobs.getStatus(jobId = "STC00052", jobName = "BLSJPRMI")
+    Assertions.assertEquals("BLSJPRMI", job.jobName)
+    Assertions.assertEquals("STC00052", job.jobId)
+    Assertions.assertEquals("OUTPUT", job.status?.value)
+    Assertions.assertEquals("CC 0000", job.returnedCode)
+    responseDispatcher.clearValidationList()
+  }
+
+  @Test
+  fun getStatusForJob() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.*")) == true
+      },
+      {
+        MockResponse().setBody(responseDispatcher.readMockJson("getStatus")).setResponseCode(200)
+      }
+    )
+    val job = getJobs.getStatusForJob(Job(
+      jobId = "STC00052",
+      jobName = "BLSJPRMI",
+      owner = "IBMUSER",
+      type = Job.JobType.STC,
+      url = "https://host:port/zosmf/restjobs/jobs/S0000052SY1.....CE35BDE8.......%3A",
+      filesUrl = "https://host:port/zosmf/restjobs/jobs/S0000052SY1.....CE35BDE8.......%3A/files",
+      phase = 20,
+      phaseName = "Job is on the hard copy queue"
+    ))
+    Assertions.assertEquals("OUTPUT", job.status?.value)
+    Assertions.assertEquals("STC", job.type.value)
+    Assertions.assertEquals(20, job.phase)
   }
 
   @Test
@@ -263,7 +311,7 @@ class GetJobsTest {
         MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles")).setResponseCode(200)
       }
     )
-    val spooFiles = getJobs.getSpoolFilesForJob(Job(
+    val spoolFiles = getJobs.getSpoolFilesForJob(Job(
       jobId = "TSU00555",
       jobName = "NBEL",
       subSystem = "JES2",
@@ -274,12 +322,32 @@ class GetJobsTest {
       phase = 14,
       phaseName = "Job is actively executing"
     ))
-    spooFiles.forEach {
+    spoolFiles.forEach {
       Assertions.assertEquals("NBEL", it.jobname)
       Assertions.assertEquals("TSU00555", it.jobId)
     }
 
     responseDispatcher.clearValidationList()
+  }
+
+  @Test
+  fun getSpoolFiles() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files")) == true
+      },
+      {
+        MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles")).setResponseCode(200)
+      }
+    )
+    val spoolFiles = getJobs.getSpoolFiles("NBEL", "TSU00555")
+    spoolFiles.forEach {
+      Assertions.assertEquals("NBEL", it.jobname)
+      Assertions.assertEquals("JES2", it.stepName)
+      Assertions.assertEquals("K", it.fileClass)
+    }
   }
 
   @Test
