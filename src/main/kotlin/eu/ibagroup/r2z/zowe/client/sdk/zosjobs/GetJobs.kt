@@ -178,4 +178,80 @@ class GetJobs(
     }
     return response?.body() as Job? ?: throw Exception("No body returned")
   }
+
+  /**
+   * Get a list of all job spool files for a job.
+   *
+   * @param params common job parameters, see CommonJobParams object
+   * @return list of SpoolFile objects
+   * @throws Exception error on getting spool files info
+   */
+  @Suppress("UNCHECKED_CAST")
+  fun getSpoolFilesCommon(params: CommonJobParams): List<SpoolFile> {
+    val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
+    val jesApi = buildApi<JESApi>(url, httpClient)
+    val call = jesApi.getJobSpoolFiles(
+      basicCredentials = Credentials.basic(connection.user, connection.password),
+      jobId = params.jobId,
+      jobName = params.jobName
+    )
+    response = call.execute()
+    if (response?.isSuccessful != true) {
+      throw Exception(response?.errorBody()?.string())
+    }
+    return response?.body() as List<SpoolFile>? ?: throw Exception("No body returned")
+  }
+
+  /**
+   * Get a list of all job spool files for a job.
+   * Alternate version of the API that accepts a Job object returned by
+   * other APIs such as SubmitJobs.
+   *
+   * @param job job for which you would like to get a list of job spool files
+   * @return list of SpoolFile objects
+   * @throws Exception error on getting spool files info
+   */
+  fun getSpoolFilesForJob(job: Job): List<SpoolFile> {
+    if (job.jobName.isEmpty()) {
+      throw Exception("job name not specified")
+    }
+    if (job.jobId.isEmpty()) {
+      throw Exception("job id not specified")
+    }
+    return getSpoolFilesCommon(CommonJobParams(jobId = job.jobId, jobName = job.jobName))
+  }
+
+  /**
+   * Get the JCL that was used to submit a job.
+   *
+   * @param params common job parameters, see CommonJobParams object
+   * @return JCL content
+   * @throws Exception error on getting jcl content
+   */
+  fun getJclCommon(params: CommonJobParams): String {
+    val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
+    val jesApi = buildApiWithBytesConverter<JESApi>(url, httpClient)
+    val call = jesApi.getJCLRecords(
+      basicCredentials = Credentials.basic(connection.user, connection.password),
+      jobName = params.jobName,
+      jobId = params.jobId
+    )
+    response = call.execute()
+    if (response?.isSuccessful != true) {
+      throw Exception(response?.errorBody()?.string())
+    }
+    return String(response?.body() as ByteArray? ?: throw Exception("No body returned"))
+  }
+
+  /**
+   * Get JCL from a job.
+   *
+   * @param jobName job name for the job for which you want to retrieve JCL
+   * @param jobId   job ID for the job for which you want to retrieve JCL
+   * @return job document on resolve
+   * @throws Exception error on getting jcl content
+   */
+  fun getJcl(jobName: String, jobId: String): String {
+    return getJclCommon(CommonJobParams(jobName = jobName, jobId = jobId))
+  }
 }

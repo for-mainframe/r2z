@@ -29,14 +29,13 @@ dependencies {
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
   testImplementation 'com.squareup.okhttp:mockwebserver:1.2.1'
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-  compile 'com.squareup.retrofit2:retrofit:2.9.0',
-          'com.squareup.retrofit2:converter-gson:2.9.0',
-          'com.squareup.retrofit2:converter-scalars:2.4.0',
-          'com.google.code.gson:gson:2.8.5',
-          'com.starxg:java-keytar:1.0.0',
-          'org.yaml:snakeyaml:1.29',
-          'org.junit.jupiter:junit-jupiter-api:5.0.2'
-
+  implementation 'com.squareup.retrofit2:retrofit:2.9.0',
+                 'com.squareup.retrofit2:converter-gson:2.9.0',
+                 'com.squareup.retrofit2:converter-scalars:2.9.0',
+                 'com.google.code.gson:gson:2.9.0',
+                 'com.starxg:java-keytar:1.0.0',
+                 'org.yaml:snakeyaml:1.29',
+                 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 }
 
 test {
@@ -67,14 +66,14 @@ artifacts {
 }
 
 signing {
-    sign configurations.archives
-    required {
-        // signing is required if this is a release version and the artifacts are to be published
-        !version.toString().endsWith('-SNAPSHOT') && tasks.withType(PublishToMavenRepository).find {
-            gradle.taskGraph.hasTask it
-        }
+  sign configurations.archives
+  required {
+    // signing is required if this is a release version and the artifacts are to be published
+    !version.toString().endsWith('-SNAPSHOT') && tasks.withType(PublishToMavenRepository).find {
+      gradle.taskGraph.hasTask it
     }
-    sign publishing.publications
+  }
+  sign publishing.publications
 }
 
 
