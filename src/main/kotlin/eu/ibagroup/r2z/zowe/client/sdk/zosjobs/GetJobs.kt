@@ -109,6 +109,7 @@ class GetJobs(
    * @return list of job objects (matching jobs)
    * @throws Exception error on getting a list of jobs
    */
+  @Suppress("UNCHECKED_CAST")
   fun getJobsCommon(params: GetJobParams): List<Job> {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val jesApi = buildApi<JESApi>(url, httpClient)
@@ -160,6 +161,33 @@ class GetJobs(
   /**
    * Get the status and other details (e.g. owner, return code) for a job.
    *
+   * @param jobName job name for the job for which you want to get status
+   * @param jobId   job ID for the job for which you want to get status
+   * @return job document (matching job)
+   * @throws Exception error getting job status
+   */
+  fun getStatus(jobName: String, jobId: String): Job {
+    return getStatusCommon(CommonJobParams(jobName, jobId))
+  }
+
+  /**
+   * Get the status and other details (e.g. owner, return code) for a job
+   * Alternate version of the API that accepts a Job object returned by
+   * other APIs such as SubmitJobs. Even though the parameter and return
+   * value are of the same type, the Job object returned will have the
+   * current status of the job.
+   *
+   * @param job job document
+   * @return job document (matching job)
+   * @throws Exception error getting job status
+   */
+  fun getStatusForJob(job: Job): Job {
+    return getStatusCommon(CommonJobParams(job.jobName, job.jobId))
+  }
+
+  /**
+   * Get the status and other details (e.g. owner, return code) for a job.
+   *
    * @param params common job parameters, see CommonJobParams object
    * @return job document (matching job)
    * @throws Exception error getting job status
@@ -177,6 +205,18 @@ class GetJobs(
       throw Exception(response?.errorBody()?.string())
     }
     return response?.body() as Job? ?: throw Exception("No body returned")
+  }
+
+  /**
+   * Get a list of all spool files for a job.
+   *
+   * @param jobName job name for the job for which you want to get a list of spool files
+   * @param jobId   job ID for the job for which you want to get a list of spool files
+   * @return list of JobFile objects
+   * @throws Exception error on getting spool files info
+   */
+  fun getSpoolFiles(jobName: String, jobId: String): List<SpoolFile> {
+    return getSpoolFilesCommon(CommonJobParams(jobName, jobId))
   }
 
   /**
