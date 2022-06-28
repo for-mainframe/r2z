@@ -5,6 +5,7 @@ package eu.ibagroup.r2z.zowe.zosjobs
 import com.squareup.okhttp.mockwebserver.MockResponse
 import com.squareup.okhttp.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.Job
+import eu.ibagroup.r2z.SpoolFile
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
 import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.GetJobs
@@ -384,6 +385,16 @@ class GetJobsTest {
     val jcl = getJobs.getJcl(jobName = "NBEL", jobId = "TSU00555")
     Assertions.assertEquals(jcl.contains("NBEL"), true)
     Assertions.assertEquals(jcl.contains("TSU00555"), true)
+  }
+
+  @Test
+  fun getSpoolContent() {
+    // TODO: implement!!! Use getSpoolContent mock.
+  }
+
+  @Test
+  fun getSpoolContentCommon () {
+    // TODO: implement!!! Use getSpoolContent mock.
   }
 
 }
