@@ -294,4 +294,38 @@ class GetJobs(
   fun getJcl(jobName: String, jobId: String): String {
     return getJclCommon(CommonJobParams(jobName = jobName, jobId = jobId))
   }
+
+  /**
+   * Get spool content from a job (keeping naming convention patter with this duplication function).
+   *
+   * @param file spool file for which you want to retrieve the content
+   * @return spool content
+   * @throws Exception error on getting spool content
+   */
+  fun getSpoolContent(file: SpoolFile): String {
+    return getSpoolContentCommon(file)
+  }
+
+  /**
+   * Get spool content from a job.
+   *
+   * @param file spool file for which you want to retrieve the content
+   * @return spool content
+   * @throws Exception error on getting spool content
+   */
+  fun getSpoolContentCommon(file: SpoolFile): String {
+    val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
+    val jesApi = buildApiWithBytesConverter<JESApi>(url, httpClient)
+    val call = jesApi.getSpoolFileRecords(
+      basicCredentials = Credentials.basic(connection.user, connection.password),
+      jobName = file.jobname,
+      jobId = file.jobId,
+      fileId = file.id
+    )
+    response = call.execute()
+    if (response?.isSuccessful != true) {
+      throw Exception(response?.errorBody()?.string())
+    }
+    return String(response?.body() as ByteArray? ?: throw Exception("No body returned"))
+  }
 }
