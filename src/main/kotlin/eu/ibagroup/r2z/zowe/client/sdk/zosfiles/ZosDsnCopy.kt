@@ -67,4 +67,27 @@ class ZosDsnCopy (
     return response ?: throw Exception("No response returned")
   }
 
+  /**
+   * This copy method allows the following copy operations:
+   * - sequential dataset to sequential dataset
+   * - sequential dataset to partition dataset member
+   * - partition dataset member to partition dataset member
+   * - partition dataset member to partition dataset non-existing member
+   * - partition dataset member to sequential dataset
+   *
+   * If copyAllMembers parameter value sent as true it will perform a copy of all
+   * members in source partition dataset to another partition dataset.
+   *
+   * @param fromDataSetName is a name of source dataset (e.g. 'SOURCE.DATASET' or 'SOURCE.DATASET(MEMBER)')
+   * @param toDataSetName is a name of target dataset (e.g. 'TARGET.DATASET' or 'TARGET.DATASET(MEMBER)')
+   * @param replace if true members in the target dataset are replaced
+   * @param copyAllMembers if true copy all members in source partition dataset specified
+   * @return http response object
+   * @throws Exception error processing copy request
+   */
+  @Throws(Exception::class)
+  fun copy(fromDataset: String, toDataset: String, replace: Boolean, copyAllMembers: Boolean) : Response<*> {
+    return copy(CopyParams(fromDataSet = fromDataset, toDataSet = toDataset, replace = replace, copyAllMembers = copyAllMembers))
+  }
+
 }
