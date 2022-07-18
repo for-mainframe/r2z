@@ -9,6 +9,7 @@ import eu.ibagroup.r2z.Job
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
 import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.MonitorJobs
+import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.MonitorJobWaitForParams
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
@@ -57,7 +58,7 @@ class MonitorJobsTest {
     var requestTimes = 0
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobId}/${job.jobName}.*")) == true
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}.*")) == true
       },
       {
         ++requestTimes
@@ -69,4 +70,52 @@ class MonitorJobsTest {
     monitorJobs.waitForJobOutputStatus(job.jobName, job.jobId)
     Assertions.assertEquals(3, requestTimes)
   }
+
+  @Test
+  fun waitForJobMessage() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val monitorJobs = MonitorJobs(connection, proxyClient)
+    val mockJobString = responseDispatcher.readMockJson("jobForTestingRetrieveSpoolContent") ?: throw Exception("File \"1\" is not found in mock data.")
+    val mockJobStringPrepared = mockJobString.substring(1, mockJobString.length - 1)
+    val job = Gson().fromJson(mockJobStringPrepared, Job::class.java)
+    val mockSpoolFiles = responseDispatcher.readMockJson("getSpoolFilesForTestingRetrieveSpoolContent") ?: throw Exception("File \"2\" is not found in mock data.")
+    val mockSpoolFileContent = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?prefix=IJMP05&jobid=JOB09502")) == true
+      },
+      {
+        MockResponse().setBody(mockJobString).setResponseCode(200)
+      }
+    )
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}/files.*")) == true
+      },
+      {
+        MockResponse().setBody(mockSpoolFiles).setResponseCode(200)
+      }
+    )
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}/files/2/records")) == true
+      },
+      {
+        MockResponse().setBody(mockSpoolFileContent).setResponseCode(200)
+      }
+    )
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}.*")) == true
+      },
+      {
+        MockResponse().setBody(Gson().toJson(job)).setResponseCode(200)
+      }
+    )
+    val doesMessageExist = monitorJobs.waitForJobMessage(job, "JOB09502")
+    Assertions.assertEquals(true, doesMessageExist)
+
+    responseDispatcher.clearValidationList()
+  }
+
 }

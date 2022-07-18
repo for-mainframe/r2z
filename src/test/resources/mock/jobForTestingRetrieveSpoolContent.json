@@ -1,0 +1,17 @@
+[
+  {
+    "owner": "ZOSMFAD",
+    "phase": 133,
+    "subsystem": "JES2",
+    "phase-name": "Job is queued for output processing",
+    "job-correlator": "J0009502S0W1....DB50A183.......:",
+    "type": "JOB",
+    "url": "https://172.20.2.121:10443/zosmf/restjobs/jobs/J0009502S0W1....DB50A183.......%3A",
+    "jobid": "JOB09502",
+    "class": "A",
+    "files-url": "https://172.20.2.121:10443/zosmf/restjobs/jobs/J0009502S0W1....DB50A183.......%3A/files",
+    "jobname": "IJMP05",
+    "status": "OUTPUT",
+    "retcode": "CC 0000"
+  }
+]
