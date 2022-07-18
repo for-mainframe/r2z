@@ -5,6 +5,7 @@ package eu.ibagroup.r2z.zowe.client.sdk.zosjobs
 import eu.ibagroup.r2z.Job
 import eu.ibagroup.r2z.UnsafeOkHttpClient
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
+import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.GetJobParams
 import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.MonitorJobWaitForParams
 import okhttp3.OkHttpClient
 
@@ -14,7 +15,7 @@ class MonitorJobs(
   var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
 ) {
 
-
+  private val DEFAULT_LINE_LIMIT: Int = 1000
   private val DEFAULT_STATUS = Job.Status.OUTPUT
   private val DEFAULT_WATCH_DELAY: Long = 3000
 
@@ -144,6 +145,150 @@ class MonitorJobs(
         throw Exception("Invalid status when checking for status ordering.")
       }
     }
+  }
+
+  /**
+   * Checks if the given message is within the job output within line limit.
+   *
+   * @param params monitor jobs params, see MonitorJobWaitForParams
+   * @param message message string
+   * @return boolean message found status
+   * @throws Exception error processing check request
+   */
+  @Throws(Exception::class)
+  private fun checkMessage(params: MonitorJobWaitForParams, message: String): Boolean {
+    val getJobs = GetJobs(connection, httpClient)
+    val jobs = getJobs.getJobsCommon(GetJobParams(
+      prefix = params.jobName ?: throw Exception("job name not specified"),
+      jobId = params.jobId ?: throw Exception("job id not specified")
+    ))
+
+    if (jobs.isEmpty()) {
+      throw Exception("job does not exist");
+    }
+    val files = getJobs.getSpoolFilesForJob(jobs[0])
+    val output = getJobs.getSpoolContent(files[0]).split("\n")
+    val lineLimit = params.lineLimit ?: DEFAULT_LINE_LIMIT
+    val size = output.size
+    val start = if (size < lineLimit) 0 else size - lineLimit
+
+    for (i in start until size) {
+      if (output[i].contains(message)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
+   * "Polls" (sets timeouts and continuously checks) for the given message within the job output.
+   *
+   * @param params monitor jobs params, see MonitorJobWaitForParams
+   * @param message message string
+   * @return boolean message found status
+   * @throws Exception error processing poll check request
+   */
+  @Throws(Exception::class)
+  private fun pollForMessage(params: MonitorJobWaitForParams, message: String): Boolean {
+    val timeoutVal = params.watchDelay ?: DEFAULT_WATCH_DELAY
+    var messageFound: Boolean // no assigment means by default it is false
+    var shouldContinue: Boolean // no assigment means by default it is false
+    var numOfAttempts = 0
+    val maxAttempts = params.attempts ?: DEFAULT_ATTEMPTS
+    do {
+      numOfAttempts++
+      messageFound = checkMessage(params, message)
+      shouldContinue = !messageFound && (maxAttempts > 0 && numOfAttempts < maxAttempts)
+      if (shouldContinue) {
+        Thread.sleep(timeoutVal)
+        if (!isJobRunning(params)) {
+          return false
+        }
+      }
+    } while (shouldContinue)
+    return numOfAttempts != maxAttempts
+  }
+
+  /**
+   * Determines if a given job is in a running state or not.
+   *
+   * @param params monitor jobs params, see MonitorJobWaitForParams
+   * @return true if in running state
+   * @throws Exception error processing running status check
+   */
+  @Throws(Exception::class)
+  fun isJobRunning(params: MonitorJobWaitForParams): Boolean {
+    val getJobs = GetJobs(connection, httpClient)
+    val jobName = params.jobName ?: throw Exception("job name not specified")
+    val jobId = params.jobId ?: throw Exception("job id not specified")
+    val status = getJobs.getStatusValue(jobName, jobId)
+    return Job.Status.INPUT.value != status && Job.Status.OUTPUT.value != status
+  }
+
+  /**
+   * Given jobname/jobid, checks for the desired message continuously (based on the interval and attempts specified).
+   *
+   * @param params monitor jobs parameters, see MonitorJobWaitForParams object
+   * @param message message string
+   * @return job document
+   * @throws Exception error processing wait check request
+   */
+  @Throws(Exception::class)
+  fun waitForMessageCommon(params: MonitorJobWaitForParams, message: String): Boolean {
+    if (params.attempts == null) {
+      params.attempts = DEFAULT_ATTEMPTS
+    }
+    if (params.watchDelay == null) {
+      params.watchDelay = DEFAULT_WATCH_DELAY;
+    }
+    if (params.lineLimit == null) {
+      params.lineLimit = DEFAULT_LINE_LIMIT;
+    }
+    return pollForMessage(params, message)
+  }
+
+  /**
+   * Given a Job document (has jobname/jobid), waits for the given message from the job. This API will poll for
+   * the given message once every 3 seconds for at least 1000 times. If the polling interval/duration is NOT
+   * sufficient, use "waitForMessageCommon" method to adjust.
+   *
+   * @param job document of the z/OS job to wait for (see z/OSMF Jobs APIs for details)
+   * @param message message string
+   * @return job document
+   * @throws Exception error processing wait check request
+   */
+  @Throws(Exception::class)
+  fun waitForJobMessage(job: Job, message: String): Boolean {
+    return waitForMessageCommon(MonitorJobWaitForParams(
+      jobName = job.jobName,
+      jobId = job.jobId,
+      jobStatus = job.status,
+      watchDelay = DEFAULT_WATCH_DELAY,
+      attempts = DEFAULT_ATTEMPTS,
+      lineLimit = DEFAULT_LINE_LIMIT
+    ), message)
+  }
+
+  /**
+   * Given a Job document (has jobname/jobid), waits for the given status of the job. This API will poll for
+   * the given status once every 3 seconds for at least 1000 times. If the polling interval/duration is NOT
+   * sufficient, use "waitForStatusCommon" method to adjust.
+   *
+   * @param job document of the z/OS job to wait for (see z/OSMF Jobs APIs for details)
+   * @param statusType status type, see JobStatus.Type object
+   * @return job document
+   * @throws Exception error processing wait check request
+   */
+  @Throws(Exception::class)
+  fun waitForJobStatus(job: Job, statusType: Job.Status): Job {
+    return waitForStatusCommon(MonitorJobWaitForParams(
+      jobName = job.jobName,
+      jobId = job.jobId,
+      jobStatus = statusType,
+      attempts = DEFAULT_ATTEMPTS,
+      watchDelay = DEFAULT_WATCH_DELAY,
+      lineLimit = DEFAULT_LINE_LIMIT
+    ))
   }
 
 }
