@@ -10,5 +10,5 @@ data class MonitorJobWaitForParams(
   val jobStatus: Job.Status? = null,
   var watchDelay: Long? = null,
   var attempts: Int? = null,
-  var lineLimit: Int? = null
+  val lineLimit: Int? = null
 )
