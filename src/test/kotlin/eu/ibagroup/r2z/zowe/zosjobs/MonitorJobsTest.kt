@@ -62,23 +62,27 @@ class MonitorJobsTest {
       },
       {
         ++requestTimes
-        val jobRsp = if (System.currentTimeMillis() - startTime < 6000) job.cloneWithChangedStatus(Job.Status.ACTIVE)
+        val jobRsp = if (System.currentTimeMillis() - startTime < 12000) job.cloneWithChangedStatus(Job.Status.ACTIVE)
         else job
         MockResponse().setBody(Gson().toJson(jobRsp)).setResponseCode(200)
       }
     )
     monitorJobs.waitForJobOutputStatus(job.jobName, job.jobId)
-    Assertions.assertEquals(3, requestTimes)
+    val jobResponse = monitorJobs.waitForJobStatus(job.jobName, job.jobId, Job.Status.OUTPUT)
+    Assertions.assertEquals(jobResponse.status, Job.Status.OUTPUT)
+    Assertions.assertEquals(6, requestTimes)
+
+    responseDispatcher.clearValidationList()
   }
 
   @Test
   fun waitForJobMessage() {
     val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
     val monitorJobs = MonitorJobs(connection, proxyClient)
-    val mockJobString = responseDispatcher.readMockJson("jobForTestingRetrieveSpoolContent") ?: throw Exception("File \"1\" is not found in mock data.")
+    val mockJobString = responseDispatcher.readMockJson("jobForTestingRetrieveSpoolContent") ?: throw Exception("File \"jobForTestingRetrieveSpoolContent.json\" is not found in mock data.")
     val mockJobStringPrepared = mockJobString.substring(1, mockJobString.length - 1)
     val job = Gson().fromJson(mockJobStringPrepared, Job::class.java)
-    val mockSpoolFiles = responseDispatcher.readMockJson("getSpoolFilesForTestingRetrieveSpoolContent") ?: throw Exception("File \"2\" is not found in mock data.")
+    val mockSpoolFiles = responseDispatcher.readMockJson("getSpoolFilesForTestingRetrieveSpoolContent") ?: throw Exception("File \"getSpoolFilesForTestingRetrieveSpoolContent.json\" is not found in mock data.")
     val mockSpoolFileContent = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
     responseDispatcher.injectEndpoint(
       {
