@@ -5,10 +5,10 @@ package eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input
 import eu.ibagroup.r2z.Job
 
 data class MonitorJobWaitForParams(
-  val jobId: String? = null,
-  val jobName: String? = null,
-  val jobStatus: Job.Status? = null,
-  var watchDelay: Long? = null,
-  var attempts: Int? = null,
-  val lineLimit: Int? = null
+    val jobId: String? = null,
+    val jobName: String? = null,
+    val jobStatus: Job.Status? = null,
+    var watchDelay: Long? = null,
+    var attempts: Int? = null,
+    var lineLimit: Int? = null
 )

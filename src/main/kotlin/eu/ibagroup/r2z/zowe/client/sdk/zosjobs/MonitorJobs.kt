@@ -5,6 +5,7 @@ package eu.ibagroup.r2z.zowe.client.sdk.zosjobs
 import eu.ibagroup.r2z.Job
 import eu.ibagroup.r2z.UnsafeOkHttpClient
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
+import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.GetJobParams
 import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.MonitorJobWaitForParams
 import okhttp3.OkHttpClient
 
@@ -14,7 +15,7 @@ class MonitorJobs(
   var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
 ) {
 
-
+  private val DEFAULT_LINE_LIMIT: Int = 1000
   private val DEFAULT_STATUS = Job.Status.OUTPUT
   private val DEFAULT_WATCH_DELAY: Long = 3000
 
