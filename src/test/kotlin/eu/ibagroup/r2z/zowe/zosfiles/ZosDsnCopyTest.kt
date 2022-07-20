@@ -47,12 +47,31 @@ class ZosDsnCopyTest {
       replace = true
     )
     responseDispatcher.injectEndpoint(
-      { it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds/NBEL.TEST.DATA")) == true &&
-              it.method?.equals("PUT") == true
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds/NBEL.TEST.DATA")) == true && it.method?.equals("PUT") == true
       },
-      { MockResponse().setResponseCode(200) }
+      {
+        MockResponse().setResponseCode(200)
+      }
     )
     val response = zosDsnCopy.copy(copyParams)
+    Assertions.assertEquals(200, response.code())
+
+    responseDispatcher.clearValidationList()
+  }
+
+  @Test
+  fun testCopy() {
+    val conn = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val zosDsnCopy = ZosDsnCopy(conn, proxyClient)
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds/NBEL.TEST.DATA")) == true && it.method?.equals("PUT") == true
+      }, {
+        MockResponse().setResponseCode(200)
+      }
+    )
+    val response = zosDsnCopy.copy("TEST.JCL(TESTJOB)", "NBEL.TEST.DATA", replace = true, copyAllMembers = false)
     Assertions.assertEquals(200, response.code())
 
     responseDispatcher.clearValidationList()
