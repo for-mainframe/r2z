@@ -296,6 +296,19 @@ class GetJobs(
   }
 
   /**
+   * Get JCL from a job.
+   * Alternate version of the API that accepts a Job object returned by
+   * other APIs such as SubmitJobs.
+   *
+   * @param job job for which you would like to retrieve JCL
+   * @return JCL content
+   * @throws Exception error on getting jcl content
+   */
+  fun getJclForJob(job: Job): String {
+    return getJclCommon(CommonJobParams(jobId = job.jobId, jobName = job.jobName))
+  }
+
+  /**
    * Get spool content from a job (keeping naming convention patter with this duplication function).
    *
    * @param file spool file for which you want to retrieve the content
@@ -304,6 +317,31 @@ class GetJobs(
    */
   fun getSpoolContent(file: SpoolFile): String {
     return getSpoolContentCommon(file)
+  }
+
+  /**
+   * Get spool content from a job using the job name, job ID, and spool ID number from z/OSMF.
+   *
+   * @param jobName job name for the job containing the spool content
+   * @param jobId   job id for the job containing the spool content
+   * @param spoolId id number assigned by zosmf that identifies the particular job spool file (DD)
+   * @return spool content
+   * @throws Exception error on getting spool content
+   */
+  fun getSpoolContentById(jobName: String, jobId: String, spoolId: Int): String {
+    val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
+    val jesApi = buildApiWithBytesConverter<JESApi>(url, httpClient)
+    val call = jesApi.getSpoolFileRecords(
+      basicCredentials = Credentials.basic(connection.user, connection.password),
+      jobName = jobName,
+      jobId = jobId,
+      fileId = spoolId
+    )
+    response = call.execute()
+    if (response?.isSuccessful != true) {
+      throw Exception(response?.errorBody()?.string())
+    }
+    return String(response?.body() as ByteArray? ?: throw Exception("No body returned"))
   }
 
   /**

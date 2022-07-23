@@ -5,7 +5,6 @@ package eu.ibagroup.r2z.zowe.zosjobs
 import com.squareup.okhttp.mockwebserver.MockResponse
 import com.squareup.okhttp.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.Job
-import eu.ibagroup.r2z.SpoolFile
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
 import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.GetJobs
@@ -388,8 +387,57 @@ class GetJobsTest {
   }
 
   @Test
+  fun getJclForJob() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    val responseBody = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records.*")) == true
+      },
+      {
+        MockResponse().setBody(responseBody).setResponseCode(200)
+      }
+    )
+    val jcl = getJobs.getJclForJob(
+      Job(
+        jobId = "TSU00555",
+        jobName = "NBEL",
+        subSystem = "JES2",
+        owner = "NBEL",
+        type = Job.JobType.TSU,
+        url = "https://host:port/zosmf/restjobs/jobs/T0000555S0W1....DB9E6D9D.......%3A",
+        filesUrl = "https://host:port/zosmf/restjobs/jobs/T0000555S0W1....DB9E6D9D.......%3A/files",
+        phase = 14,
+        phaseName = "Job is actively executing"
+      )
+    )
+    Assertions.assertEquals(jcl.contains("NBEL"), true)
+    Assertions.assertEquals(jcl.contains("TSU00555"), true)
+  }
+
+  @Test
   fun getSpoolContent() {
     // TODO: implement!!! Use getSpoolContent mock.
+  }
+
+  @Test
+  fun getSpoolContentById() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val getJobs = GetJobs(connection, proxyClient)
+    val responseBody = javaClass.classLoader.getResource("mock/getSpoolFileContent.txt")?.readText()
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/TESTJCL/JOB09502/files/2/records.*")) == true
+      },
+      {
+        MockResponse().setBody(responseBody).setResponseCode(200)
+      }
+    )
+    val spoolFile = getJobs.getSpoolContentById("TESTJCL", "JOB09502", 2)
+    Assertions.assertEquals(spoolFile.contains("J E S 2  J O B  L O G"), true)
+    Assertions.assertEquals(spoolFile.contains("TESTJCL"), true)
+    Assertions.assertEquals(spoolFile.contains("JOB09502"), true)
   }
 
   @Test
