@@ -10,6 +10,7 @@ import java.lang.IllegalArgumentException
 
 interface JESApi {
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restjobs/jobs/{job-name}/{job-id}")
   fun getJob(
     @Header("Authorization") basicCredentials: String,
@@ -21,6 +22,7 @@ interface JESApi {
     @Query("exec-data") execData: ExecData? = null
   ): Call<Job>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restjobs/jobs/{job-correlator}")
   fun getJob(
     @Header("Authorization") basicCredentials: String,
@@ -30,6 +32,7 @@ interface JESApi {
     @Query("exec-data") execData: ExecData? = null
   ): Call<Job>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restjobs/jobs")
   fun getFilteredJobs(
     @Header("Authorization") basicCredentials: String,
@@ -44,6 +47,7 @@ interface JESApi {
     @Query("status") status: ActiveStatus? = null
   ): Call<List<Job>>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restjobs/jobs/{job-name}/{job-id}/files")
   fun getJobSpoolFiles(
     @Header("Authorization") basicCredentials: String,
@@ -51,13 +55,14 @@ interface JESApi {
     @Path("job-id") jobId: String
   ): Call<List<SpoolFile>>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restjobs/jobs/{job-correlator}/files")
   fun getJobSpoolFiles(
     @Header("Authorization") basicCredentials: String,
     @Path("job-correlator") jobCorrelator: String,
   ): Call<List<SpoolFile>>
 
-
+  @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restjobs/jobs/{job-name}/{job-id}/files/{file-id}/records")
   fun getSpoolFileRecords(
     @Header("Authorization") basicCredentials: String,
@@ -78,6 +83,7 @@ interface JESApi {
     @Query("maxreturnsize") maxreturnsize: Int? = null
     ): Call<ByteArray>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restjobs/jobs/{job-correlator}/files/{file-id}/records")
   fun getSpoolFileRecords(
     @Header("Authorization") basicCredentials: String,
@@ -97,6 +103,7 @@ interface JESApi {
     @Query("maxreturnsize") maxreturnsize: Int? = null
   ): Call<ByteArray>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restjobs/jobs/{job-name}/{job-id}/files/JCL/records")
   fun getJCLRecords(
     @Header("Authorization") basicCredentials: String,
@@ -116,6 +123,7 @@ interface JESApi {
     @Query("maxreturnsize") maxreturnsize: Int? = null
   ): Call<ByteArray>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restjobs/jobs/{job-correlator}/files/JCL/records")
   fun getJCLRecords(
     @Header("Authorization") basicCredentials: String,
@@ -134,6 +142,7 @@ interface JESApi {
     @Query("maxreturnsize") maxreturnsize: Int? = null
   ): Call<ByteArray>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restjobs/jobs")
   fun submitJobRequest(
     @Header("Authorization") basicCredentials: String,
@@ -151,6 +160,7 @@ interface JESApi {
     @Header("X-IBM-Intrdr-FileEncoding") fileEncoding: String? = null
   ): Call<SubmitJobRequest>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restjobs/jobs")
   fun submitJobRequest(
     @Header("Authorization") basicCredentials: String,
@@ -168,6 +178,7 @@ interface JESApi {
     @Header("X-IBM-Intrdr-FileEncoding") fileEncoding: String? = null
   ): Call<SubmitJobRequest>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restjobs/jobs/{jobname}/{jobid}")
   fun holdJobRequest(
     @Header("Authorization") basicCredentials: String,
@@ -176,6 +187,7 @@ interface JESApi {
     @Body body: HoldJobRequestBody
   ): Call<HoldJobRequest>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restjobs/jobs/{job-correlator}")
   fun holdJobRequest(
     @Header("Authorization") basicCredentials: String,
@@ -183,6 +195,7 @@ interface JESApi {
     @Body body: HoldJobRequestBody
   ): Call<HoldJobRequest>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restjobs/jobs/{jobname}/{jobid}")
   fun releaseJobRequest(
     @Header("Authorization") basicCredentials: String,
@@ -191,6 +204,7 @@ interface JESApi {
     @Body body: ReleaseJobRequestBody
   ): Call<ReleaseJobRequest>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restjobs/jobs/{job-correlator}")
   fun releaseJobRequest(
     @Header("Authorization") basicCredentials: String,
@@ -198,6 +212,7 @@ interface JESApi {
     @Body body: ReleaseJobRequestBody
   ): Call<ReleaseJobRequest>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restjobs/jobs/{jobname}/{jobid}")
   fun cancelJobRequest(
     @Header("Authorization") basicCredentials: String,
@@ -206,6 +221,7 @@ interface JESApi {
     @Body body: CancelJobRequestBody
   ): Call<CancelJobRequest>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restjobs/jobs/{job_correlator}")
   fun cancelJobRequest(
     @Header("Authorization") basicCredentials: String,
@@ -213,6 +229,7 @@ interface JESApi {
     @Body body: CancelJobRequestBody
   ): Call<CancelJobRequest>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @DELETE("/zosmf/restjobs/jobs/{jobname}/{jobid}")
   fun cancelJobPurgeOutRequest(
     @Header("Authorization") basicCredentials: String,
@@ -221,6 +238,7 @@ interface JESApi {
     @Path("jobid") jobId: String
   ): Call<CancelJobPurgeOutRequest>
 
+  @AvailableSince(ZVersion.ZOS_2_1)
   @DELETE("/zosmf/restjobs/jobs/{job_correlator}")
   fun cancelJobPurgeOutRequest(
     @Header("Authorization") basicCredentials: String,
