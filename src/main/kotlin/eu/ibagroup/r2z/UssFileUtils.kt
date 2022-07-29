@@ -47,19 +47,20 @@ data class ChangeTag(
   @SerializedName("request")
   @Expose
   private val request: String = "chtag",
+
   @SerializedName("action")
   @Expose
   var action: TagAction,
 
   @SerializedName("type")
   @Expose
-  var type: XIBMDataType?,
+  var type: UssFileDataType? = null,
 
   @SerializedName("links")
   var links: Links? = null,
 
   @SerializedName("codeset")
-  var codeSet: Links? = null,
+  var codeSet: String? = null,
 
   @SerializedName("recursive")
   var recursive: Boolean? = null
@@ -75,6 +76,12 @@ enum class TagAction {
   LIST
 }
 
+enum class UssFileDataType(val value: String) {
+  TEXT("text"),
+  BINARY("binary"),
+  MIXED("mixed")
+}
+
 enum class Links {
   @SerializedName("follow")
   FOLLOW,
@@ -83,4 +90,10 @@ enum class Links {
   @SerializedName("change")
   CHANGE
 }
+
+data class FileTagList(
+  @SerializedName("stdout")
+  @Expose
+  var stdout: List<String>,
+)
 
