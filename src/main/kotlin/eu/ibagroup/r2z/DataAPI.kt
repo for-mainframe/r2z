@@ -442,9 +442,9 @@ interface DataAPI {
   fun changeFileTag(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
-    @Body body: ChangeOwner,
+    @Body body: ChangeTag,
     @Path("filepath-name") filePath: FilePath,
-  ): Call<Void>
+  ): Call<ResponseBody>
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/fs/{filepath-name}")

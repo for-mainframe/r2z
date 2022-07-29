@@ -8,3 +8,4 @@ gradle
 .gradle.properties
 bin
 .vscode
+gradle.properties.for-release
