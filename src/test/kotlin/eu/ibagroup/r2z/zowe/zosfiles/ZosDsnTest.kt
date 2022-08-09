@@ -109,14 +109,18 @@ class ZosDsnTest {
   fun writeDsn() {
     val conn = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
     val zosDsn = ZosDsn(conn, proxyClient)
+    val memberText = "member"
+    val dsnText = "dataset"
     responseDispatcher.injectEndpoint({
       it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds/TEST\\.IJMP\\.DATASET1(\\(TEST\\))?")) == true
     }, {
+      val textToCheck = if (it?.path?.contains(Regex("TEST.IJMP.DATASET1\\(TEST\\)")) == true) memberText else dsnText
+      Assertions.assertEquals(String(it?.body ?: byteArrayOf()), textToCheck)
       MockResponse().setResponseCode(204)
     })
-    val datasetResponse = zosDsn.writeDsn("TEST.IJMP.DATASET1", "asd".toByteArray())
+    val datasetResponse = zosDsn.writeDsn("TEST.IJMP.DATASET1", dsnText.toByteArray())
     Assertions.assertEquals(204, datasetResponse.code())
-    val memberResponse = zosDsn.writeDsn("TEST.IJMP.DATASET1", "TEST", "asd".toByteArray())
+    val memberResponse = zosDsn.writeDsn("TEST.IJMP.DATASET1", "TEST", memberText.toByteArray())
     Assertions.assertEquals(204, memberResponse.code())
 
     responseDispatcher.clearValidationList()

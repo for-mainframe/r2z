@@ -108,7 +108,7 @@ class ZosDsn(
    */
   fun writeDsn(dataSetName: String, content: ByteArray): Response<*> {
     val baseUrl = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
-    val dataApi = buildApi<DataAPI>(baseUrl, httpClient)
+    val dataApi = buildApiWithBytesConverter<DataAPI>(baseUrl, httpClient)
     val call = dataApi.writeToDataset(
       authorizationToken = Credentials.basic(connection.user, connection.password),
       datasetName = dataSetName,
@@ -133,7 +133,7 @@ class ZosDsn(
    */
   fun writeDsn(dataSetName: String, member: String, content: ByteArray): Response<*> {
     val baseUrl = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
-    val dataApi = buildApi<DataAPI>(baseUrl, httpClient)
+    val dataApi = buildApiWithBytesConverter<DataAPI>(baseUrl, httpClient)
     val call = dataApi.writeToDatasetMember(
       authorizationToken = Credentials.basic(connection.user, connection.password),
       datasetName = dataSetName,
