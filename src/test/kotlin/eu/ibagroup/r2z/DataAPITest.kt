@@ -198,6 +198,18 @@ class DataAPITest {
   }
 
   @Test
+  fun testRenameUssFile() {
+    val newDataApi = buildApi(zosmfUrl, UnsafeOkHttpClient.unsafeOkHttpClient, DataAPI::class.java)
+    val request = newDataApi.moveUssFile(
+      authorizationToken = basicCreds,
+      body = MoveUssFile(from = "/u/DLIS/files/dir&"),
+      filePath = FilePath("/u/DLIS/files/dir"),
+    )
+    val response = request.execute()
+    assert(response.isSuccessful)
+  }
+
+  @Test
   fun testInfoRequest() {
     val request = infoAPI.getSystemInfo()
     val response = request.execute()
