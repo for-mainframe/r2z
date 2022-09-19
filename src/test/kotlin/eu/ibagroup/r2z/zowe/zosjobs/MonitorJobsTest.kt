@@ -9,7 +9,6 @@ import eu.ibagroup.r2z.Job
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
 import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.MonitorJobs
-import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.MonitorJobWaitForParams
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
@@ -71,6 +70,34 @@ class MonitorJobsTest {
     val jobResponse = monitorJobs.waitForJobStatus(job.jobName, job.jobId, Job.Status.OUTPUT)
     Assertions.assertEquals(jobResponse.status, Job.Status.OUTPUT)
     Assertions.assertEquals(6, requestTimes)
+
+    responseDispatcher.clearValidationList()
+  }
+
+  @Test
+  fun waitForJobStatusByJob() {
+    val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+    val monitorJobs = MonitorJobs(connection, proxyClient)
+    val mockJobString = responseDispatcher.readMockJson("getJob") ?: throw Exception("File \"getJob.json\" is not found in mock data.")
+    val mockJobStringPrepared = mockJobString.substring(1, mockJobString.length - 1)
+    val job = Gson().fromJson(mockJobStringPrepared, Job::class.java)
+    val startTime = System.currentTimeMillis()
+    var requestTimes = 0
+    responseDispatcher.injectEndpoint(
+      {
+        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}.*")) == true
+      },
+      {
+        ++requestTimes
+        val jobRsp = if (System.currentTimeMillis() - startTime < 12000) job.cloneWithChangedStatus(Job.Status.ACTIVE)
+        else job
+        MockResponse().setBody(Gson().toJson(jobRsp)).setResponseCode(200)
+      }
+    )
+    monitorJobs.waitForJobOutputStatus(job)
+    val jobResponse = monitorJobs.waitForJobStatus(job, Job.Status.OUTPUT)
+    Assertions.assertEquals(jobResponse.status, Job.Status.OUTPUT)
+    Assertions.assertEquals(4, requestTimes)
 
     responseDispatcher.clearValidationList()
   }
