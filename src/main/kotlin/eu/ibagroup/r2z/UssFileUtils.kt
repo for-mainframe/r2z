@@ -2,9 +2,12 @@
 
 package eu.ibagroup.r2z
 
+import com.google.gson.TypeAdapter
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 
 data class ChangeMode(
   @SerializedName("request")
@@ -12,7 +15,7 @@ data class ChangeMode(
   private val request: String = "chmod",
   @SerializedName("mode")
   @Expose
-  @JsonAdapter(ToStringAdapter::class)
+  @JsonAdapter(FileModeToStringAdapter::class)
   var mode: FileMode,
 
   @SerializedName("links")
@@ -96,4 +99,15 @@ data class FileTagList(
   @Expose
   var stdout: List<String>,
 )
+
+class FileModeToStringAdapter: TypeAdapter<FileMode>() {
+
+  override fun write(out: JsonWriter, value: FileMode) {
+    out.value("${value.owner}${value.group}${value.all}")
+  }
+
+  override fun read(`in`: JsonReader?): FileMode {
+    TODO("Not yet implemented")
+  }
+}
 
