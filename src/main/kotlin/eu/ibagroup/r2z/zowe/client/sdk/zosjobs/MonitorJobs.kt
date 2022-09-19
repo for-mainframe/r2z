@@ -32,6 +32,24 @@ class MonitorJobs(
   }
 
   /**
+   * Given a Job document (has jobname/jobid), waits for the status of the job to be "OUTPUT". This API will poll for
+   * the OUTPUT status once every 3 seconds indefinitely. If the polling interval/duration is NOT sufficient, use
+   * "waitForStatusCommon" to adjust.
+   * <p>
+   * See JSDoc for "waitForStatusCommon" for full details on polling and other logic.
+   *
+   * @param job document of the z/OS job to wait for (see z/OSMF Jobs APIs for details)
+   * @return job document
+   * @throws Exception error processing wait check request
+   */
+  @Throws(Exception::class)
+  fun waitForJobOutputStatus(job: Job): Job {
+    return waitForStatusCommon(
+      MonitorJobWaitForParams(job.jobId, job.jobName, Job.Status.OUTPUT, DEFAULT_WATCH_DELAY, DEFAULT_ATTEMPTS)
+    )
+  }
+
+  /**
    * Given the jobname/jobid, waits for the status of the job to be "OUTPUT". This API will poll for the OUTPUT status
    * once every 3 seconds indefinitely. If the polling interval/duration is NOT sufficient, use
    * "waitForStatusCommon" to adjust.
@@ -67,7 +85,7 @@ class MonitorJobs(
   @Throws(Exception::class)
   fun waitForStatusCommon(params: MonitorJobWaitForParams): Job {
     params.jobName ?: throw IllegalArgumentException("job name not specified")
-    params.jobId ?: throw IllegalArgumentException("job name not specified")
+    params.jobId ?: throw IllegalArgumentException("job id not specified")
     if (params.attempts == null) {
       params.attempts = DEFAULT_ATTEMPTS
     }
@@ -164,7 +182,7 @@ class MonitorJobs(
     ))
 
     if (jobs.isEmpty()) {
-      throw Exception("job does not exist");
+      throw Exception("job does not exist")
     }
     val files = getJobs.getSpoolFilesForJob(jobs[0])
     val output = getJobs.getSpoolContent(files[0]).split("\n")
@@ -239,10 +257,10 @@ class MonitorJobs(
       params.attempts = DEFAULT_ATTEMPTS
     }
     if (params.watchDelay == null) {
-      params.watchDelay = DEFAULT_WATCH_DELAY;
+      params.watchDelay = DEFAULT_WATCH_DELAY
     }
     if (params.lineLimit == null) {
-      params.lineLimit = DEFAULT_LINE_LIMIT;
+      params.lineLimit = DEFAULT_LINE_LIMIT
     }
     return pollForMessage(params, message)
   }
@@ -267,6 +285,25 @@ class MonitorJobs(
       attempts = DEFAULT_ATTEMPTS,
       lineLimit = DEFAULT_LINE_LIMIT
     ), message)
+  }
+
+  /**
+   * Given a Job document (has jobname/jobid), waits for the given status of the job. This API will poll for
+   * the given status once every 3 seconds for at least 1000 times. If the polling interval/duration is NOT
+   * sufficient, use "waitForStatusCommon" method to adjust.
+   * <p>
+   * See JavaDoc for "waitForStatusCommon" for full details on polling and other logic.
+   *
+   * @param job        document of the z/OS job to wait for (see z/OSMF Jobs APIs for details)
+   * @param statusType status type, see JobStatus.Type object
+   * @return job document
+   * @throws Exception error processing wait check request
+   */
+  @Throws(Exception::class)
+  fun waitForJobStatus(job: Job, statusType: Job.Status): Job {
+    return waitForStatusCommon(
+      MonitorJobWaitForParams(job.jobId, job.jobName, statusType, DEFAULT_WATCH_DELAY, DEFAULT_ATTEMPTS)
+    )
   }
 
   /**
