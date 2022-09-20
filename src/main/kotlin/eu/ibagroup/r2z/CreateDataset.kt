@@ -75,11 +75,9 @@ data class CreateDataset(
 enum class AllocationUnit(private val type : String) {
   @SerializedName("TRK")
   TRK("TRK"),
+
   @SerializedName("CYL")
-  CYL("CYL"),
-  @Deprecated("This one doesn't work in z/OSMF. Just to simplify For Mainframe plugin")
-  @SerializedName("BLK")
-  BLK("BLK");
+  CYL("CYL");
 
   override fun toString(): String {
     return type
