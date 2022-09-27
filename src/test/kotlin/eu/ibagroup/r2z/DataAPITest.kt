@@ -379,7 +379,7 @@ class DataAPITest {
   fun testDeleteUssFile() {
     val request = dataAPI.deleteUssFile(
       authorizationToken = basicCreds,
-      filePath = "u/KIRYL/ijmp/nice.txt",
+      filePath = FilePath("u/KIRYL/ijmp/nice.txt"),
     )
     val response = request.execute()
     assert(response.isSuccessful)

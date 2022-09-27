@@ -415,7 +415,7 @@ interface DataAPI {
   @DELETE("/zosmf/restfiles/fs/{filepath-name}")
   fun deleteUssFile(
     @Header("Authorization") authorizationToken: String,
-    @Path("filepath-name") filePath: String,
+    @Path("filepath-name", encoded = true) filePath: FilePath,
     @Header("X-IBM-Option") xIBMOption: XIBMOption? = null
   ): Call<Void>
 
