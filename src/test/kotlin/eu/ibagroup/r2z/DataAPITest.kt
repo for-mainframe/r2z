@@ -344,7 +344,10 @@ class DataAPITest {
   @Test
   fun testRetrieveUssFileContent() {
     val request =
-      dataAPI.retrieveUssFileContent(authorizationToken = basicCreds, filePath = "u/KIRYL/ijmp/nice.txt")
+      dataAPI.retrieveUssFileContent(
+        authorizationToken = basicCreds,
+        filePath = FilePath("u/KIRYL/ijmp/nice.txt")
+      )
     val response = request.execute()
     assert(response.isSuccessful)
     print(response.body())
