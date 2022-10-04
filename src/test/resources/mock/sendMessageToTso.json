@@ -1,0 +1,26 @@
+{
+  "servletKey": "DLIS-121-aabcaaat",
+  "ver": "0100",
+  "tsoData": [
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "IKJ56650I TIME-06:43:59 PM. CPU-00:00:00 SERVICE-595 SESSION-00:05:00 SEPTEMBER 22,2022"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "READY "
+      }
+    },
+    {
+      "TSO PROMPT": {
+        "VERSION": "0100",
+        "HIDDEN": "FALSE"
+      }
+    }
+  ],
+  "reused": false,
+  "timeout": false
+}
