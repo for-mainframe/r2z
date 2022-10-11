@@ -40,6 +40,23 @@ class ZosUssFileTest {
     }
 
     @Test
+    fun deleteFile() {
+        val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+        val zosUssFile = ZosUssFile(connection, proxyClient)
+
+        responseDispatcher.injectEndpoint(
+            {
+                it?.path?.matches(Regex("http://.*/zosmf/restfiles/fs/u/IJMP/text.txt")) == true
+            },
+            { MockResponse().setResponseCode(204) }
+        )
+        val response = zosUssFile.deleteFile("/u/IJMP/text.txt")
+        Assertions.assertEquals(204, response.code())
+
+        responseDispatcher.clearValidationList()
+    }
+
+    @Test
     fun createUssFile() {
         val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
         val zosUssFile = ZosUssFile(connection, proxyClient)
