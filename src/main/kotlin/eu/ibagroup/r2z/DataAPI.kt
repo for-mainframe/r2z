@@ -396,9 +396,9 @@ interface DataAPI {
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifNoneMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("Accept-Encoding") acceptEncoding: String? = "gzip",
-    @Header("Content-Type") contentType: String? = "application/octet-stream",
-    @Path("filepath-name") filePath: String,
+    @Header("Accept-Encoding") acceptEncoding: String? = null, //"gzip",
+    @Header("Content-Type") contentType: String? = "text/plain", //"application/octet-stream",
+    @Path("filepath-name", encoded = true) filePath: FilePath,
     @Body body: ByteArray
   ): Call<Void>
 
