@@ -354,7 +354,7 @@ class DataAPITest {
   fun testWriteToUssFile() {
     val request = dataAPI.writeToUssFile(
       authorizationToken = basicCreds,
-      filePath = "u/KIRYL/ijmp/readme2.md",
+      filePath = FilePath("u/KIRYL/ijmp/readme2.md"),
       body = "Nice really!".toByteArray()
     )
     val response = request.execute()
