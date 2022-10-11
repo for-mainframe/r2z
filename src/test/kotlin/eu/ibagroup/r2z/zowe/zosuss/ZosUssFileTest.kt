@@ -40,6 +40,50 @@ class ZosUssFileTest {
     }
 
     @Test
+    fun createUssFile() {
+        val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+        val zosUssFile = ZosUssFile(connection, proxyClient)
+        val params = CreateUssFile(
+            type = FileType.FILE,
+            mode = FileMode(7,7,7)
+        )
+
+        responseDispatcher.injectEndpoint(
+            {
+                it?.path?.matches(Regex("http://.*/zosmf/restfiles/fs/u/IJMP/text.txt")) == true //&&
+                        //Gson().fromJson(String(it.body), CreateUssFile::class.java) == params
+            },
+            { MockResponse().setResponseCode(201) }
+        )
+        val response = zosUssFile.createFile("/u/IJMP/text.txt", params)
+        Assertions.assertEquals(201, response.code())
+
+        responseDispatcher.clearValidationList()
+    }
+
+    @Test
+    fun createUssDir() {
+        val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+        val zosUssFile = ZosUssFile(connection, proxyClient)
+        val params = CreateUssFile(
+            type = FileType.DIR,
+            mode = FileMode(7,7,7)
+        )
+
+        responseDispatcher.injectEndpoint(
+            {
+                it?.path?.matches(Regex("http://.*/zosmf/restfiles/fs/u/IJMP/newdir")) == true //&&
+                //Gson().fromJson(String(it.body), CreateUssFile::class.java) == params
+            },
+            { MockResponse().setResponseCode(201) }
+        )
+        val response = zosUssFile.createFile("/u/IJMP/newdir", params)
+        Assertions.assertEquals(201, response.code())
+
+        responseDispatcher.clearValidationList()
+    }
+
+    @Test
     fun writeToFile() {
         val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
         val zosUssFile = ZosUssFile(connection, proxyClient)
@@ -57,3 +101,4 @@ class ZosUssFileTest {
         responseDispatcher.clearValidationList()
     }
 }
+

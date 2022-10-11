@@ -407,7 +407,7 @@ interface DataAPI {
   fun createUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Override-Umask") xIBMOverrideUmask: Boolean = true,
-    @Path("filepath-name") filePath: FilePath,
+    @Path("filepath-name", encoded = true) filePath: FilePath,
     @Body body: CreateUssFile
   ): Call<Void>
 
