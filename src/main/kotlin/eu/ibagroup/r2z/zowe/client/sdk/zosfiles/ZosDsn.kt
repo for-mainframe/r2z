@@ -35,7 +35,7 @@ class ZosDsn(
     val emptyDataSet = Dataset(dataSetName)
     val tokens: List<String> = dataSetName.split(".")
     val length = tokens.size - 1
-    if (1 >= length) {
+    if (length < 0) {
       return emptyDataSet
     }
     val str = StringBuilder()
