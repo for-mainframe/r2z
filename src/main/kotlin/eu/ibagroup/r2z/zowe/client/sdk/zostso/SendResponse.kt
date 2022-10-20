@@ -18,7 +18,7 @@ data class SendResponse(
    * The list of zOSMF send API responses. May issue multiple requests or
    * to ensure that all messages are collected. Each individual response is placed here.
    */
-  val zosmfTsoResponses: List<TsoResponse> = emptyList(),
+  val tsoResponses: List<TsoResponse> = emptyList(),
 
   /**
    * The command response text.
