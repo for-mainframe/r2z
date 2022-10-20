@@ -32,7 +32,7 @@ interface TsoApi {
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
     @Query("proc") proc: String,
     @Query("chset") chset: String,
-    @Query("cpage") cpage: TsoCodePage,
+    @Query("cpage") cpage: String,
     @Query("rows") rows: Int,
     @Query("cols") cols: Int,
     @Query("acct") acct: String? = null,

@@ -18,7 +18,7 @@ class TsoApiTest: BaseTest() {
       authorizationToken = BASIC_AUTH_TOKEN,
       proc = "IKJACCNT",
       chset = "697",
-      cpage = TsoCodePage.IBM_1047,
+      cpage = "1047",
       rows = 204,
       cols = 160,
       rsize = 50000,
