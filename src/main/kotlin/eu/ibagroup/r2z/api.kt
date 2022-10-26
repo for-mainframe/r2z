@@ -11,6 +11,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 val gson: Gson = GsonBuilder()
   .setLenient()
+  .disableHtmlEscaping()
   .create()
 
 inline fun <reified API> buildApi(baseUrl: String, httpClient: OkHttpClient): API {

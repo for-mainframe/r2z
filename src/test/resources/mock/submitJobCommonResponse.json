@@ -1,0 +1,15 @@
+{
+  "owner": "ZOSMFAD",
+  "phase": 14,
+  "subsystem": "JES2",
+  "phase-name": "Job is actively executing",
+  "job-correlator": "J0007379S0W1....DB234E9B.......:",
+  "type": "JOB",
+  "url": "https://172.20.2.121:10443/zosmf/restjobs/jobs/J0007379S0W1....DB234E9B.......%3A",
+  "jobid": "JOB07379",
+  "class": "A",
+  "files-url": "https://172.20.2.121:10443/zosmf/restjobs/jobs/J0007379S0W1....DB234E9B.......%3A/files",
+  "jobname": "TESTJOB",
+  "status": "ACTIVE",
+  "retcode": null
+}

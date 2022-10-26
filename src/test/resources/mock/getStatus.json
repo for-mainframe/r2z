@@ -1,0 +1,15 @@
+{
+  "jobid":"STC00052",
+  "jobname":"BLSJPRMI",
+  "subsystem":"JES2",
+  "owner":"IBMUSER",
+  "status":"OUTPUT",
+  "type":"STC",
+  "class":"STC",
+  "retcode":"CC 0000",
+  "url":"https:\/\/host:port\/zosmf\/restjobs\/jobs\/S0000052SY1.....CE35BDE8.......%3A",
+  "files-url":"https:\/\/host:port\/zosmf\/restjobs\/jobs\/S0000052SY1.....CE35BDE8.......%3A\/files",
+  "job-correlator":"S0000052SY1.....CE35BDE8.......:",
+  "phase":"20",
+  "phase-name":"Job is on the hard copy queue"
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "jobid":"JOB00023",
+    "jobname":"TESTJOB2",
+    "subsystem":null,
+    "owner":"IBMUSER",
+    "status":"OUTPUT",
+    "type":"JOB",
+    "class":"A",
+    "retcode":"CC 0000",
+    "phase-name": "PHASE1",
+    "url":"https:\/\/host:port\/zosmf\/restjobs\/jobs\/TESTJOB2\/JOB00023",
+    "files-url":"https:\/\/host:port\/zosmf\/restjobs\/jobs\/TESTJOB2\/JOB00023\/files"
+  }
+]

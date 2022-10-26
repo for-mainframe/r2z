@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import eu.ibagroup.r2z.annotations.AvailableSince
 import eu.ibagroup.r2z.annotations.ZVersion
 
-data class JobStatus(
+data class Job(
 
   @SerializedName("jobid")
   @Expose

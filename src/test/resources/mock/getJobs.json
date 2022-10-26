@@ -1,0 +1,26 @@
+[
+  {
+    "jobid":"JOB00023",
+    "jobname":"TESTJOB2",
+    "subsystem":null,
+    "owner":"IBMUSER",
+    "status":"OUTPUT",
+    "type":"JOB",
+    "class":"A",
+    "retcode":"CC 0000",
+    "url":"https:\/\/host:port\/zosmf\/restjobs\/jobs\/TESTJOB2\/JOB00023",
+    "files-url":"https:\/\/host:port\/zosmf\/restjobs\/jobs\/TESTJOB2\/JOB00023\/files"
+  },
+  {
+    "jobid":"JOB00024",
+    "jobname":"TESTJOB3",
+    "subsystem":null,
+    "owner":"IBMUSER",
+    "status":"OUTPUT",
+    "type":"JOB",
+    "class":"A",
+    "retcode":"ABEND S000",
+    "url":"https:\/\/host:port\/zosmf\/restjobs\/jobs\/TESTJOB3\/JOB00024",
+    "files-url":"https:\/\/host:port\/zosmf\/restjobs\/jobs\/TESTJOB3\/JOB00024\/files"
+  }
+]

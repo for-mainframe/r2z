@@ -15,6 +15,13 @@ enum class ZVersion(val version: String) {
 }
 
 @Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
+@Inherited
+annotation class IsSupported(val value: Boolean)
+
+@Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
 @Inherited
-annotation class AvailableSince(val version: ZVersion)
+annotation class AvailableSince(
+  @IsSupported(true) val version: ZVersion
+  )
