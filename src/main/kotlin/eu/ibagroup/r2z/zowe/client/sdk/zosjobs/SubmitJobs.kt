@@ -52,7 +52,9 @@ class SubmitJobs(
     )
     response = call.execute()
     if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
+      throw Exception(response?.errorBody()?.string() +
+              "\nHTTP status code: ${response?.code()}." +
+              "\nMessage: ${response?.message()}")
     }
     return response?.body() as SubmitJobRequest? ?: throw Exception("No body returned")
   }
@@ -89,7 +91,9 @@ class SubmitJobs(
     )
     response = call.execute()
     if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
+      throw Exception(response?.errorBody()?.string() +
+              "\nHTTP status code: ${response?.code()}." +
+              "\nMessage: ${response?.message()}")
     }
     return response?.body() as SubmitJobRequest? ?: throw Exception("No body returned")
   }
