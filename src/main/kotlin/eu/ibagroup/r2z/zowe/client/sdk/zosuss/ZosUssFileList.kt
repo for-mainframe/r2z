@@ -35,7 +35,7 @@ class ZosUssFileList (
         val dataApi = buildApi<DataAPI>(url, httpClient)
         val call = dataApi.listUssPath(
             authorizationToken = Credentials.basic(connection.user, connection.password),
-            path = FilePath(filePath),
+            path = filePath,
             xIBMMaxItems = params.limit,
             xIBMLstat = params.lstat,
             depth = params.depth,

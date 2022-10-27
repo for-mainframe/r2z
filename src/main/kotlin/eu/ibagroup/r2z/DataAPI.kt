@@ -29,7 +29,7 @@ interface DataAPI {
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
     @Header("X-IBM-Lstat") xIBMLstat: Boolean = false,
-    @Query("path") path: FilePath,
+    @Query("path") path: String,
     @Query("depth") depth: Int = 1,
     @Query("filesys") fileSystem: String? = null,
     @Query("symlinks") followSymlinks: SymlinkMode? = null,
