@@ -1,0 +1,76 @@
+{
+  "servletKey": "DLIS-121-aabcaaat",
+  "queueID": "8192030",
+  "sessionID": "0x79",
+  "ver": "0100",
+  "tsoData": [
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "IKJ56455I DLIS LOGON IN PROGRESS AT 17:31:11 ON SEPTEMBER 22, 2022"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "IKJ56951I NO BROADCAST MESSAGES"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*****************************************************************"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*                                                               *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "* APPLICATION DEVELOPER'S CONTROLLED DISTRIBUTION (ADCD)        *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*                                                               *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  ADCD.Z23D.CLIST(ISPFCL) PRODUCES THIS MESSAGE                *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  ADCD.* DATASETS CONTAIN SYSTEM CUSTOMIZATION                 *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  SMP/E DATASETS CAN BE LOCATED FROM 3.4 WITH DSNAME **.CSI    *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  HTTP://DTSC.DFW.IBM.COM/ADCD.HTML CONTAINS DOCUMENTATION     *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*                                                               *"
+      }
+    }
+  ],
+  "reused": false,
+  "timeout": false
+}

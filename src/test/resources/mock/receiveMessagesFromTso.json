@@ -1,0 +1,74 @@
+{
+  "servletKey": "DLIS-121-aabcaaat",
+  "ver": "0100",
+  "tsoData": [
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  USERID              PASSWORD        COMMENT                  *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  ----------------    ------------ --------------              *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  IBMUSER             - SYS1/IBMUSER FULL AUTHORITY            *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  ADCDMST             - ADCDMST      FULL AUTHORITY            *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  ADCDA THRU ADCDZ    - TEST         LIMITED AUTHORITY(NO OMVS)*"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*  OPEN1 THRU OPEN3    - SYS1         UID(0) (NO TSO)           *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*                                                               *"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "*****************************************************************"
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": " "
+      }
+    },
+    {
+      "TSO MESSAGE": {
+        "VERSION": "0100",
+        "DATA": "READY "
+      }
+    },
+    {
+      "TSO PROMPT": {
+        "VERSION": "0100",
+        "HIDDEN": "FALSE"
+      }
+    }
+  ],
+  "reused": false,
+  "timeout": false
+}
