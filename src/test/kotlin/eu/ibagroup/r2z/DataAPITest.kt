@@ -45,7 +45,7 @@ class DataAPITest {
   fun testListUss() {
     val request = dataAPI.listUssPath(
       authorizationToken = basicCreds,
-      path = FilePath("/u/CHP/test-env/test-files/testprog-jcl"),
+      path = "/u/CHP/test-env/test-files/testprog-jcl",
       depth = 1,
       followSymlinks = SymlinkMode.REPORT
     )
