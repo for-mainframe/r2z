@@ -43,7 +43,7 @@ object UnsafeOkHttpClient {
       )
 
       // Install the all-trusting trust manager
-      val sslContext = SSLContext.getInstance("SSL")
+      val sslContext = SSLContext.getInstance("TLSv1.2")
       sslContext.init(null, trustAllCerts, SecureRandom())
 
       // Create an ssl socket factory with our all-trusting manager

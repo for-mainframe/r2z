@@ -59,7 +59,7 @@ open class BaseTest {
           }
         }
       )
-      val sslContext: SSLContext = SSLContext.getInstance("SSL")
+      val sslContext: SSLContext = SSLContext.getInstance("TLSv1.2")
       sslContext.init(null, trustAllCerts, SecureRandom())
 
       val sslSocketFactory: SSLSocketFactory = sslContext.getSocketFactory()
