@@ -35,4 +35,9 @@ object TsoConstants {
    * Default region-size value
    */
   const val DEFAULT_RSIZE = "4096"
+
+  /**
+   * z/OSMF unknown error
+   */
+  const val ZOSMF_UNKNOWN_ERROR = "zOSMF unknown error response"
 }
