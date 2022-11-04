@@ -1,12 +1,14 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z
+package common
 
+import eu.ibagroup.r2z.BinaryMode
+import eu.ibagroup.r2z.JESApi
+import eu.ibagroup.r2z.RecordRange
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import retrofit2.Call
-
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SpoolFileRecordsTest : BaseTest() {
@@ -44,8 +46,8 @@ class SpoolFileRecordsTest : BaseTest() {
 
   fun executeCallAndCheckResult(call: Call<ByteArray>) {
     val response = call.execute()
-    if (response.isSuccessful == true) {
-      var arr = response.body() as ByteArray
+    if (response.isSuccessful) {
+      val arr = response.body() as ByteArray
       println(arr.toString(Charsets.UTF_8))
 
     } else {

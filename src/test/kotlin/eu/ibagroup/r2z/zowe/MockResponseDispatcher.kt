@@ -1,9 +1,9 @@
 package eu.ibagroup.r2z.zowe
 
-import com.squareup.okhttp.mockwebserver.Dispatcher
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.RecordedRequest
 import eu.ibagroup.r2z.zowe.config.decodeFromBase64
+import okhttp3.mockwebserver.Dispatcher
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.RecordedRequest
 import org.junit.jupiter.api.Assertions
 
 class MockResponseDispatcher : Dispatcher() {
@@ -31,8 +31,8 @@ class MockResponseDispatcher : Dispatcher() {
     validationList.clear()
   }
 
-  override fun dispatch(request: RecordedRequest?): MockResponse {
-    val authTokenRequest = request?.getHeader("Authorization") ?: Assertions.fail("auth token must be presented.")
+  override fun dispatch(request: RecordedRequest): MockResponse {
+    val authTokenRequest = request.getHeader("Authorization") ?: Assertions.fail("auth token must be presented.")
     val credentials = decodeBasicAuthToken(authTokenRequest).split(":")
     val usernameRequest = credentials[0]
     val passwordRequest = credentials[1]

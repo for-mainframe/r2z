@@ -25,14 +25,14 @@ repositories {
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib"
-  implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.21"
-  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-  testImplementation 'com.squareup.okhttp:mockwebserver:1.2.1'
+  implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.21"
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+  testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
   implementation 'com.squareup.retrofit2:retrofit:2.9.0',
                  'com.squareup.retrofit2:converter-gson:2.9.0',
                  'com.squareup.retrofit2:converter-scalars:2.9.0',
-                 'com.google.code.gson:gson:2.9.0',
+                 'com.google.code.gson:gson:2.10',
                  'com.starxg:java-keytar:1.0.0',
                  'org.yaml:snakeyaml:1.29',
                  'org.junit.jupiter:junit-jupiter-api:5.8.2'
@@ -57,6 +57,43 @@ task sourceJar(type: Jar) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
   classifier "javadoc"
   from javadoc.destinationDir
+}
+
+/**
+ * Adds intTest source sets
+ */
+sourceSets {
+  intTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir 'src/intTest/kotlin'
+    }
+    resources {
+      srcDir 'src/intTest/resources'
+    }
+  }
+}
+
+/**
+ * Configures the integration tests to inherit the testImplementation and testRuntimeOnly in dependencies
+ */
+configurations {
+  intTestImplementation.extendsFrom testImplementation
+  intTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+task intTest(type:Test) {
+  description = "Run integration tests"
+  group = "verification"
+  testClassesDirs = sourceSets.intTest.output.classesDirs
+  classpath = sourceSets.intTest.runtimeClasspath
+  useJUnitPlatform() {
+    excludeTags "FirstTime"
+  }
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
 }
 
 artifacts {
@@ -150,7 +187,6 @@ def customizePom(pom) {
     }
   }
 }
-
 
 model {
   tasks.generatePomFileForMavenJavaPublication {

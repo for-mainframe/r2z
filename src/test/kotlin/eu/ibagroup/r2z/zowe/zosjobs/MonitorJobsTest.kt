@@ -3,8 +3,8 @@
 package eu.ibagroup.r2z.zowe.zosjobs
 
 import com.google.gson.Gson
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.Job
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.net.InetSocketAddress
 import java.net.Proxy
-import kotlin.concurrent.thread
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MonitorJobsTest {
@@ -29,10 +28,8 @@ class MonitorJobsTest {
   fun createMockServer() {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -57,11 +54,11 @@ class MonitorJobsTest {
     var requestTimes = 0
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}.*")) == true
       },
       {
         ++requestTimes
-        val jobRsp = if (System.currentTimeMillis() - startTime < 12000) job.cloneWithChangedStatus(Job.Status.ACTIVE)
+        val jobRsp = if (System.currentTimeMillis() - startTime < 3000) job.cloneWithChangedStatus(Job.Status.ACTIVE)
         else job
         MockResponse().setBody(Gson().toJson(jobRsp)).setResponseCode(200)
       }
@@ -69,7 +66,7 @@ class MonitorJobsTest {
     monitorJobs.waitForJobOutputStatus(job.jobName, job.jobId)
     val jobResponse = monitorJobs.waitForJobStatus(job.jobName, job.jobId, Job.Status.OUTPUT)
     Assertions.assertEquals(jobResponse.status, Job.Status.OUTPUT)
-    Assertions.assertEquals(6, requestTimes)
+    Assertions.assertEquals(3, requestTimes)
 
     responseDispatcher.clearValidationList()
   }
@@ -85,11 +82,11 @@ class MonitorJobsTest {
     var requestTimes = 0
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}.* HTTP/.*")) == true
       },
       {
         ++requestTimes
-        val jobRsp = if (System.currentTimeMillis() - startTime < 12000) job.cloneWithChangedStatus(Job.Status.ACTIVE)
+        val jobRsp = if (System.currentTimeMillis() - startTime < 3000) job.cloneWithChangedStatus(Job.Status.ACTIVE)
         else job
         MockResponse().setBody(Gson().toJson(jobRsp)).setResponseCode(200)
       }
@@ -97,7 +94,7 @@ class MonitorJobsTest {
     monitorJobs.waitForJobOutputStatus(job)
     val jobResponse = monitorJobs.waitForJobStatus(job, Job.Status.OUTPUT)
     Assertions.assertEquals(jobResponse.status, Job.Status.OUTPUT)
-    Assertions.assertEquals(4, requestTimes)
+    Assertions.assertEquals(3, requestTimes)
 
     responseDispatcher.clearValidationList()
   }
@@ -113,7 +110,7 @@ class MonitorJobsTest {
     val mockSpoolFileContent = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?prefix=IJMP05&jobid=JOB09502")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?prefix=IJMP05&jobid=JOB09502 HTTP/.*")) == true
       },
       {
         MockResponse().setBody(mockJobString).setResponseCode(200)
@@ -121,7 +118,7 @@ class MonitorJobsTest {
     )
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}/files.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}/files.* HTTP/.*")) == true
       },
       {
         MockResponse().setBody(mockSpoolFiles).setResponseCode(200)
@@ -129,15 +126,15 @@ class MonitorJobsTest {
     )
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}/files/2/records")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}/files/2/records HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(mockSpoolFileContent).setResponseCode(200)
+        MockResponse().setBody(mockSpoolFileContent ?: "").setResponseCode(200)
       }
     )
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/${job.jobName}/${job.jobId}.* HTTP/.*")) == true
       },
       {
         MockResponse().setBody(Gson().toJson(job)).setResponseCode(200)
