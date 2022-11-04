@@ -2,8 +2,8 @@
 
 package eu.ibagroup.r2z.zowe.zosfiles
 
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
 import eu.ibagroup.r2z.zowe.client.sdk.zosfiles.ZosDsnDownload
@@ -24,10 +24,8 @@ class ZosDsnDownloadTest {
   fun createMockServer() {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -43,10 +41,10 @@ class ZosDsnDownloadTest {
     val zosDsnDownload = ZosDsnDownload(conn, proxyClient)
     val downloadParams = DownloadParams(
     )
-    val responseBody = javaClass.classLoader.getResource("mock/downloadDsnMember.txt")?.readText()
+    val responseBody = javaClass.classLoader.getResource("mock/downloadDsnMember.txt")?.readText() ?: ""
     responseDispatcher.injectEndpoint(
-      { it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds/TEST.JCL\\(TESTJOB\\)")) == true &&
-        it.method?.equals("GET") == true
+      {
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restfiles/ds/TEST.JCL\\(TESTJOB\\) HTTP/.*")) == true
       },
       { MockResponse().setBody(responseBody) }
     )

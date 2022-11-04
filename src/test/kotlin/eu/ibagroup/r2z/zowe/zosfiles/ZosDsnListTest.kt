@@ -2,8 +2,8 @@
 
 package eu.ibagroup.r2z.zowe.zosfiles
 
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
 import eu.ibagroup.r2z.zowe.client.sdk.zosfiles.ZosDsnList
@@ -25,10 +25,8 @@ class ZosDsnListTest {
   fun createMockServer () {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -46,9 +44,9 @@ class ZosDsnListTest {
     )
     val zosDsnList = ZosDsnList(conn, proxyClient)
     responseDispatcher.injectEndpoint({
-      it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds.*")) == true
+      it?.requestLine?.matches(Regex("GET http://.*/zosmf/restfiles/ds.* HTTP/.*")) == true
     }, {
-      MockResponse().setBody(responseDispatcher.readMockJson("listDatasets"))
+      MockResponse().setBody(responseDispatcher.readMockJson("listDatasets") ?: "")
     })
     val dsnList = zosDsnList.listDsn("TEST.**.TEST1", listParams)
     responseDispatcher.clearValidationList()
@@ -61,9 +59,9 @@ class ZosDsnListTest {
     val listParams = ListParams()
     val zosDsnList = ZosDsnList(conn, proxyClient)
     responseDispatcher.injectEndpoint({
-      it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds.*")) == true
+      it?.requestLine?.matches(Regex("GET http://.*/zosmf/restfiles/ds.* HTTP/.*")) == true
     }, {
-      MockResponse().setBody(responseDispatcher.readMockJson("listDatasetMembers"))
+      MockResponse().setBody(responseDispatcher.readMockJson("listDatasetMembers") ?: "")
     })
     val dsnMembersList = zosDsnList.listDsnMembers("SYS1.PROCLIB", listParams)
     Assertions.assertEquals(87, dsnMembersList.items.size)

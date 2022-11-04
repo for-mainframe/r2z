@@ -2,8 +2,8 @@
 
 package eu.ibagroup.r2z.zowe.zosjobs
 
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.Job
 import eu.ibagroup.r2z.RequestVersion
 import eu.ibagroup.r2z.zowe.*
@@ -13,7 +13,6 @@ import okhttp3.OkHttpClient
 import org.junit.jupiter.api.*
 import java.net.InetSocketAddress
 import java.net.Proxy
-import kotlin.concurrent.thread
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeleteJobsTest {
@@ -26,10 +25,8 @@ class DeleteJobsTest {
   fun createMockServer() {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -45,11 +42,11 @@ class DeleteJobsTest {
     val deleteJobs = DeleteJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/TESTJOBW/JOB00085")) == true &&
+        it?.requestLine?.matches(Regex("DELETE http://.*/zosmf/restjobs/jobs/TESTJOBW/JOB00085 HTTP/.*")) == true &&
             it.getHeader("X-IBM-Job-Modify-Version") == RequestVersion.SYNCHRONOUS.value
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("deleteJobs")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("deleteJobs") ?: "").setResponseCode(200)
       }
     )
     val response = deleteJobs.deleteJob("TESTJOBW", "JOB00085", RequestVersion.SYNCHRONOUS)
@@ -64,11 +61,11 @@ class DeleteJobsTest {
     val deleteJobs = DeleteJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/TESTJOBW/JOB00085")) == true &&
+        it?.requestLine?.matches(Regex("DELETE http://.*/zosmf/restjobs/jobs/TESTJOBW/JOB00085 HTTP/.*")) == true &&
             it.getHeader("X-IBM-Job-Modify-Version") == RequestVersion.SYNCHRONOUS.value
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("deleteJobs")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("deleteJobs") ?: "").setResponseCode(200)
       }
     )
     val response = deleteJobs.deleteJobForJob(

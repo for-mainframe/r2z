@@ -2,8 +2,8 @@
 
 package eu.ibagroup.r2z.zowe.zosjobs
 
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.*
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
@@ -24,10 +24,8 @@ class CancelJobsTest {
   fun createMockServer() {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -43,10 +41,10 @@ class CancelJobsTest {
     val cancelJobs = CancelJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/TESTJOB2/JOB00084")) == true
+        it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restjobs/jobs/TESTJOB2/JOB00084 HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("cancelJobs")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("cancelJobs") ?: "").setResponseCode(200)
       }
     )
     val response = cancelJobs.cancelJob("TESTJOB2", "JOB00084", RequestVersion.SYNCHRONOUS)
@@ -61,10 +59,10 @@ class CancelJobsTest {
     val cancelJobs = CancelJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/TESTJOB2/JOB00084")) == true
+        it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restjobs/jobs/TESTJOB2/JOB00084 HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("cancelJobs")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("cancelJobs") ?: "").setResponseCode(200)
       }
     )
     val response = cancelJobs.cancelJobForJob(

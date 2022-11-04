@@ -2,8 +2,8 @@
 
 package eu.ibagroup.r2z.zowe.zosjobs
 
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.Job
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
@@ -27,10 +27,8 @@ class GetJobsTest {
   fun createMockServer() {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -46,13 +44,13 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?owner=IBMUSER")) == true ||
-            it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?prefix=\\*")) == true ||
-            it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?jobid=JOB00023")) == true ||
-            it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?owner=testUser")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?owner=IBMUSER HTTP/.*")) == true ||
+            it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?prefix=\\* HTTP/.*")) == true ||
+            it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?jobid=JOB00023 HTTP/.*")) == true ||
+            it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?owner=testUser HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getJobs")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getJobs") ?: "").setResponseCode(200)
       }
     )
     var jobs = getJobs.getJobsCommon(GetJobParams(owner = "IBMUSER"))
@@ -77,10 +75,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?jobid=JOB00023")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?jobid=JOB00023 HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getJob")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getJob") ?: "").setResponseCode(200)
       }
     )
     val job = getJobs.getJob("JOB00023")
@@ -96,10 +94,10 @@ class GetJobsTest {
 
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.* HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getStatus")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getStatus") ?: "").setResponseCode(200)
       }
     )
     val job = getJobs.getStatusCommon(CommonJobParams("BLSJPRMI", "STC00052"))
@@ -114,10 +112,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?owner=${connection.user}")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?owner=${connection.user} HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getJobsTest")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getJobsTest") ?: "").setResponseCode(200)
       }
     )
     val jobs = getJobs.getJobs()
@@ -133,10 +131,10 @@ class GetJobsTest {
 
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.* HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getStatus")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getStatus") ?: "").setResponseCode(200)
       }
     )
     val status = getJobs.getStatusValue("BLSJPRMI", "STC00052")
@@ -152,10 +150,10 @@ class GetJobsTest {
 
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.* HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getStatus")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getStatus") ?: "").setResponseCode(200)
       }
     )
     val status = getJobs.getStatusValueForJob(
@@ -182,10 +180,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.* HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getStatus")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getStatus") ?: "").setResponseCode(200)
       }
     )
     val job = getJobs.getStatus(jobId = "STC00052", jobName = "BLSJPRMI")
@@ -202,10 +200,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/BLSJPRMI/STC00052.* HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getStatus")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getStatus") ?: "").setResponseCode(200)
       }
     )
     val job = getJobs.getStatusForJob(Job(
@@ -229,10 +227,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?owner=ZOSMFAD")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?owner=ZOSMFAD HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getJobsByOwner")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getJobsByOwner") ?: "").setResponseCode(200)
       }
     )
     val jobs = getJobs.getJobsByOwner("ZOSMFAD")
@@ -247,10 +245,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?prefix=IJMP\\*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?prefix=IJMP\\* HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getJobsByPrefix")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getJobsByPrefix") ?: "").setResponseCode(200)
       }
     )
     val jobs = getJobs.getJobsByPrefix("IJMP*")
@@ -265,10 +263,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs\\?owner=ZOSMFAD&prefix=\\*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs\\?owner=ZOSMFAD&prefix=\\* HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getJobsByOwnerAndPrefix")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getJobsByOwnerAndPrefix") ?: "").setResponseCode(200)
       }
     )
     val jobs = getJobs.getJobsByOwnerAndPrefix("ZOSMFAD" ,"*")
@@ -284,10 +282,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles") ?: "").setResponseCode(200)
       }
     )
     val spoolFiles = getJobs.getSpoolFilesCommon(CommonJobParams(jobName = "NBEL", jobId = "TSU00555"))
@@ -305,10 +303,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles") ?: "").setResponseCode(200)
       }
     )
     val spoolFiles = getJobs.getSpoolFilesForJob(Job(
@@ -336,10 +334,10 @@ class GetJobsTest {
     val getJobs = GetJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles")).setResponseCode(200)
+        MockResponse().setBody(responseDispatcher.readMockJson("getSpoolFiles") ?: "").setResponseCode(200)
       }
     )
     val spoolFiles = getJobs.getSpoolFiles("NBEL", "TSU00555")
@@ -357,10 +355,10 @@ class GetJobsTest {
     val responseBody = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records\\?mode=text")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records\\?mode=text HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseBody).setResponseCode(200)
+        MockResponse().setBody(responseBody ?: "").setResponseCode(200)
       }
     )
     val jcl = getJobs.getJclCommon(CommonJobParams(jobName = "NBEL", jobId = "TSU00555"))
@@ -375,10 +373,10 @@ class GetJobsTest {
     val responseBody = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records\\?mode=text")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records\\?mode=text HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseBody).setResponseCode(200)
+        MockResponse().setBody(responseBody ?: "").setResponseCode(200)
       }
     )
     val jcl = getJobs.getJcl(jobName = "NBEL", jobId = "TSU00555")
@@ -393,10 +391,10 @@ class GetJobsTest {
     val responseBody = javaClass.classLoader.getResource("mock/getJcl.txt")?.readText()
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/NBEL/TSU00555/files/JCL/records.* HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseBody).setResponseCode(200)
+        MockResponse().setBody(responseBody ?: "").setResponseCode(200)
       }
     )
     val jcl = getJobs.getJclForJob(
@@ -428,10 +426,10 @@ class GetJobsTest {
     val responseBody = javaClass.classLoader.getResource("mock/getSpoolFileContent.txt")?.readText()
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs/TESTJCL/JOB09502/files/2/records.*")) == true
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/restjobs/jobs/TESTJCL/JOB09502/files/2/records.* HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseBody).setResponseCode(200)
+        MockResponse().setBody(responseBody ?: "").setResponseCode(200)
       }
     )
     val spoolFile = getJobs.getSpoolContentById("TESTJCL", "JOB09502", 2)
