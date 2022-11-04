@@ -10,15 +10,12 @@
 
 package eu.ibagroup.r2z.zowe
 
-import com.squareup.okhttp.mockwebserver.MockWebServer
-import eu.ibagroup.r2z.DataAPI
-import eu.ibagroup.r2z.buildGsonApi
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.zowe.config.*
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.*
 import java.net.InetSocketAddress
 import java.net.Proxy
-import kotlin.concurrent.thread
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ZoweConfigParsingTest: ZoweConfigTestBase() {
@@ -32,10 +29,8 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
   fun createMockServer () {
     keytarWrapper = DefaultMockKeytarWrapper()
     mockServer = MockWebServer()
-    mockServer.setDispatcher(MockResponseDispatcher())
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = MockResponseDispatcher()
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -92,31 +87,13 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
     Assertions.assertDoesNotThrow { zoweConfig.getAuthEncoding() }
   }
 
-
-  @Test
-  fun readConfigAndListDatasets() {
-    val authToken = zoweConfig.getAuthEncoding().withBasicPrefix()
-
-    val dataApi = buildGsonApi<DataAPI>("http://${zoweConfig.host}:${zoweConfig.port}", proxyClient)
-    val response = dataApi.listDataSets(
-      authorizationToken = authToken,
-      dsLevel = "TEST.*"
-    ).execute()
-    if (response.isSuccessful) {
-      val datasetLists = response.body()
-      Assertions.assertEquals(datasetLists?.items?.size, 4)
-    } else {
-      Assertions.fail("response must be successful.")
-    }
-  }
-
   fun checkZoweConfig(zoweConfig: ZoweConfig) {
     Assertions.assertEquals(zoweConfig.user, TEST_USER)
     Assertions.assertEquals(zoweConfig.password, TEST_PASSWORD)
     Assertions.assertEquals(zoweConfig.host, "example.host1")
     Assertions.assertEquals(zoweConfig.rejectUnauthorized, true)
     Assertions.assertEquals(zoweConfig.port, 10443)
-    Assertions.assertEquals(zoweConfig.protocol, "http")
+    Assertions.assertEquals(zoweConfig.protocol, "https")
     Assertions.assertEquals(zoweConfig.basePath, "/")
     Assertions.assertEquals(zoweConfig.encoding, 1047)
     Assertions.assertEquals(zoweConfig.responseTimeout, 600)

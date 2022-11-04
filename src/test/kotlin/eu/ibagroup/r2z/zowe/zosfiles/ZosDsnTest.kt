@@ -3,8 +3,8 @@
 package eu.ibagroup.r2z.zowe.zosfiles
 
 import com.google.gson.Gson
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.CreateDataset
 import eu.ibagroup.r2z.DatasetOrganization
 import eu.ibagroup.r2z.RecordFormat
@@ -28,10 +28,8 @@ class ZosDsnTest {
   fun createMockServer() {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -47,8 +45,8 @@ class ZosDsnTest {
     val zosDsn = ZosDsn(connection, proxyClient)
 
     responseDispatcher.injectEndpoint(
-      { it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds.*")) == true },
-      { MockResponse().setBody(responseDispatcher.readMockJson("listDatasets")) }
+      { it?.requestLine?.matches(Regex("GET http://.*/zosmf/restfiles/ds.* HTTP/.*")) == true },
+      { MockResponse().setBody(responseDispatcher.readMockJson("listDatasets") ?: "") }
     )
     val datasetInfo = zosDsn.getDatasetInfo("TEST.IJMP.DATASET1")
     Assertions.assertEquals(4500, datasetInfo.blockSize)
@@ -64,8 +62,8 @@ class ZosDsnTest {
     val zosDsn = ZosDsn(connection, proxyClient)
 
     responseDispatcher.injectEndpoint(
-      { it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds.*")) == true },
-      { MockResponse().setBody(responseDispatcher.readMockJson("listDatasets")) }
+      { it?.requestLine?.matches(Regex("GET http://.*/zosmf/restfiles/ds.* HTTP/.*")) == true },
+      { MockResponse().setBody(responseDispatcher.readMockJson("listDatasets") ?: "") }
     )
     val datasetInfo = zosDsn.getDatasetInfo("TEST.IJMP.DATASET5")
     Assertions.assertEquals(null, datasetInfo.blockSize)
@@ -79,8 +77,8 @@ class ZosDsnTest {
     val zosDsn = ZosDsn(connection, proxyClient)
 
     responseDispatcher.injectEndpoint(
-      { it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds/TEST.IJMP.DATASET")) == true &&
-        it.method?.equals("DELETE") == true
+      {
+        it?.requestLine?.matches(Regex("DELETE http://.*/zosmf/restfiles/ds/TEST.IJMP.DATASET HTTP/.*")) == true
       },
       { MockResponse().setResponseCode(204) }
     )
@@ -96,7 +94,7 @@ class ZosDsnTest {
     val zosDsn = ZosDsn(connection, proxyClient)
 
     responseDispatcher.injectEndpoint(
-      { it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds/TEST.IJMP.DATASET\\(TESTMEM\\)")) == true },
+      { it?.requestLine?.matches(Regex("DELETE http://.*/zosmf/restfiles/ds/TEST.IJMP.DATASET\\(TESTMEM\\) HTTP/.*")) == true },
       { MockResponse().setResponseCode(204) }
     )
     val response = zosDsn.deleteDsn("TEST.IJMP.DATASET", "TESTMEM")
@@ -111,13 +109,16 @@ class ZosDsnTest {
     val zosDsn = ZosDsn(conn, proxyClient)
     val memberText = "member"
     val dsnText = "dataset"
-    responseDispatcher.injectEndpoint({
-      it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds/TEST\\.IJMP\\.DATASET1(\\(TEST\\))?")) == true
-    }, {
-      val textToCheck = if (it?.path?.contains(Regex("TEST.IJMP.DATASET1\\(TEST\\)")) == true) memberText else dsnText
-      Assertions.assertEquals(String(it?.body ?: byteArrayOf()), textToCheck)
-      MockResponse().setResponseCode(204)
-    })
+    responseDispatcher.injectEndpoint(
+      {
+        it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restfiles/ds/TEST\\.IJMP\\.DATASET1(\\(TEST\\))? HTTP/.*")) == true
+      },
+      {
+        val textToCheck = if (it?.requestLine?.contains(Regex("TEST.IJMP.DATASET1\\(TEST\\)")) == true) memberText else dsnText
+        Assertions.assertEquals(it?.body?.readUtf8(), textToCheck)
+        MockResponse().setResponseCode(204)
+      }
+    )
     val datasetResponse = zosDsn.writeDsn("TEST.IJMP.DATASET1", dsnText.toByteArray())
     Assertions.assertEquals(204, datasetResponse.code())
     val memberResponse = zosDsn.writeDsn("TEST.IJMP.DATASET1", "TEST", memberText.toByteArray())
@@ -139,8 +140,8 @@ class ZosDsnTest {
 
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restfiles/ds/TEST.IJMP.DATASET")) == true &&
-            Gson().fromJson(String(it.body), CreateDataset::class.java) == params
+        it?.requestLine?.matches(Regex("POST http://.*/zosmf/restfiles/ds/TEST.IJMP.DATASET HTTP/.*")) == true &&
+            Gson().fromJson(it.body.readUtf8(), CreateDataset::class.java) == params
       },
       { MockResponse().setResponseCode(201) }
     )

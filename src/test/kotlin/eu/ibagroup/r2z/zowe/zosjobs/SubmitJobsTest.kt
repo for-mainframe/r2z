@@ -2,8 +2,8 @@
 
 package eu.ibagroup.r2z.zowe.zosjobs
 
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.Intrdr_Recfm
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
@@ -26,10 +26,8 @@ class SubmitJobsTest {
   fun createMockServer() {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -46,10 +44,10 @@ class SubmitJobsTest {
 
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs")) == true &&
-            String(it.body).matches(Regex(".*\"file\":\"//'TEST.JOBS\\(JOBNAME\\)'\".*"))
+        it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restjobs/jobs HTTP/.*")) == true &&
+            it.body.toString().matches(Regex(".*\"file\":\"//'TEST.JOBS\\(JOBNAME\\)'\".*"))
       },
-      { MockResponse().setBody(responseDispatcher.readMockJson("submitJobs")) }
+      { MockResponse().setBody(responseDispatcher.readMockJson("submitJobs") ?: "") }
     )
     val response = submitJobs.submitJob("//'TEST.JOBS(JOBNAME)'")
     Assertions.assertEquals("ZOSMFAD", response.owner)
@@ -66,10 +64,10 @@ class SubmitJobsTest {
       jobDataSet = "//'TEST.JCL(TESTJOB)'"
     )
     responseDispatcher.injectEndpoint({
-      it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs")) == true &&
-              String(it.body).matches(Regex(".*\"file\":\"//'TEST.JCL\\(TESTJOB\\)'\".*"))
+      it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restjobs/jobs HTTP/.*")) == true &&
+              it.body.toString().matches(Regex(".*\"file\":\"//'TEST.JCL\\(TESTJOB\\)'\".*"))
     }, {
-      MockResponse().setBody(responseDispatcher.readMockJson("submitJobCommonResponse"))
+      MockResponse().setBody(responseDispatcher.readMockJson("submitJobCommonResponse") ?: "")
     })
     val jobSubmitResponse = submitJobs.submitJobCommon(params)
     Assertions.assertEquals("TESTJOB", jobSubmitResponse.jobname)
@@ -83,11 +81,11 @@ class SubmitJobsTest {
     val submitJobs = SubmitJobs(connection, proxyClient)
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs")) == true &&
+        it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restjobs/jobs HTTP/.*")) == true &&
             it.getHeader("X-IBM-Intrdr-Recfm") == Intrdr_Recfm.F.value &&
             it.getHeader("X-IBM-Intrdr-Lrecl") == "F"
       },
-      { MockResponse().setBody(responseDispatcher.readMockJson("submitJobs")).setResponseCode(201) }
+      { MockResponse().setBody(responseDispatcher.readMockJson("submitJobs") ?: "").setResponseCode(201) }
     )
     val response = submitJobs.submitJcl(
       javaClass.classLoader.getResource("mock/submitJcl.txt")?.readText() ?: "nothing",
@@ -104,11 +102,11 @@ class SubmitJobsTest {
 
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restjobs/jobs")) == true &&
+        it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restjobs/jobs HTTP/.*")) == true &&
             it.getHeader("X-IBM-Intrdr-Recfm") == Intrdr_Recfm.F.value &&
             it.getHeader("X-IBM-Intrdr-Lrecl") == "F"
       },
-      { MockResponse().setBody(responseDispatcher.readMockJson("submitJobs")).setResponseCode(201) }
+      { MockResponse().setBody(responseDispatcher.readMockJson("submitJobs") ?: "").setResponseCode(201) }
     )
     val params = SubmitJclParams(
       jcl = javaClass.classLoader.getResource("mock/submitJcl.txt")?.readText() ?: "nothing",
