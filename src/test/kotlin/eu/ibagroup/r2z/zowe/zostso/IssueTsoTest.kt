@@ -2,8 +2,8 @@
 
 package eu.ibagroup.r2z.zowe.zostso
 
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
 import eu.ibagroup.r2z.zowe.client.sdk.zostso.IssueTso
@@ -24,10 +24,8 @@ class IssueTsoTest {
   fun createMockServer() {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -53,34 +51,34 @@ class IssueTsoTest {
 
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/tsoApp/tso.*proc=DBSPROCB.*acct=IZUACCT.*")) == true && it.method == "POST"
+        it?.requestLine?.matches(Regex("POST http://.*/zosmf/tsoApp/tso.*proc=DBSPROCB.*acct=IZUACCT.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("startTso"))
+        MockResponse().setBody(responseDispatcher.readMockJson("startTso") ?: "")
       }
     )
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/tsoApp/tso/.*")) == true && it.method == "PUT"
+        it?.requestLine?.matches(Regex("PUT http://.*/zosmf/tsoApp/tso/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("sendMessageToTso"))
+        MockResponse().setBody(responseDispatcher.readMockJson("sendMessageToTso") ?: "")
       }
     )
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/tsoApp/tso/.*")) == true && it.method == "GET"
+        it?.requestLine?.matches(Regex("GET http://.*/zosmf/tsoApp/tso/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("receiveMessagesFromTso"))
+        MockResponse().setBody(responseDispatcher.readMockJson("receiveMessagesFromTso") ?: "")
       }
     )
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/tsoApp/tso/DLIS-121-aabcaaat")) == true && it.method == "DELETE"
+        it?.requestLine?.matches(Regex("DELETE http://.*/zosmf/tsoApp/tso/DLIS-121-aabcaaat HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("stopTso"))
+        MockResponse().setBody(responseDispatcher.readMockJson("stopTso") ?: "")
       }
     )
 

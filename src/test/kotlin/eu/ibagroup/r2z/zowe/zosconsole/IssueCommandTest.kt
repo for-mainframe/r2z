@@ -2,8 +2,8 @@
 
 package eu.ibagroup.r2z.zowe.zosconsole
 
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.IssueRequestBody
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
@@ -24,10 +24,8 @@ class IssueCommandTest {
   fun createMockServer() {
     mockServer = MockWebServer()
     responseDispatcher = MockResponseDispatcher()
-    mockServer.setDispatcher(responseDispatcher)
-    thread(start = true) {
-      mockServer.play()
-    }
+    mockServer.dispatcher = responseDispatcher
+    mockServer.start()
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -49,10 +47,10 @@ class IssueCommandTest {
 
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restconsoles/consoles/ibmusecn")) == true
+        it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restconsoles/consoles/ibmusecn HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("issueCommand"))
+        MockResponse().setBody(responseDispatcher.readMockJson("issueCommand") ?: "")
       }
     )
 
@@ -74,10 +72,10 @@ class IssueCommandTest {
 
     responseDispatcher.injectEndpoint(
       {
-        it?.path?.matches(Regex("http://.*/zosmf/restconsoles/consoles/defcn")) == true
+        it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restconsoles/consoles/defcn HTTP/.*")) == true
       },
       {
-        MockResponse().setBody(responseDispatcher.readMockJson("issueCommand"))
+        MockResponse().setBody(responseDispatcher.readMockJson("issueCommand") ?: "")
       }
     )
 
