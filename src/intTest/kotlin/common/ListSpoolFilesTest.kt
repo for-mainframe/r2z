@@ -1,7 +1,9 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z
+package common
 
+import eu.ibagroup.r2z.JESApi
+import eu.ibagroup.r2z.SpoolFile
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -30,9 +32,9 @@ class ListSpoolFilesTest : BaseTest(){
   }
 
   fun executeCallAndCheckResult(call: Call<List<SpoolFile>>){
-    var response = call.execute()
-    if(response.isSuccessful == true){
-      var spoolFiles = response.body()
+    val response = call.execute()
+    if (response.isSuccessful){
+      val spoolFiles = response.body()
       spoolFiles?.forEach { el-> println(el) }
     } else{
       Assertions.assertTrue(false)

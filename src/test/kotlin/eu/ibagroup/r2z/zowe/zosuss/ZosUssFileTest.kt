@@ -3,8 +3,8 @@
 package eu.ibagroup.r2z.zowe.zosuss
 
 import com.google.gson.Gson
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.*
 import eu.ibagroup.r2z.zowe.*
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
@@ -26,10 +26,8 @@ class ZosUssFileTest {
     fun createMockServer() {
         mockServer = MockWebServer()
         responseDispatcher = MockResponseDispatcher()
-        mockServer.setDispatcher(responseDispatcher)
-        thread(start = true) {
-            mockServer.play()
-        }
+        mockServer.dispatcher = responseDispatcher
+        mockServer.start()
         val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
         proxyClient = OkHttpClient.Builder().proxy(proxy).build()
     }
@@ -46,7 +44,7 @@ class ZosUssFileTest {
 
         responseDispatcher.injectEndpoint(
             {
-                it?.path?.matches(Regex("http://.*/zosmf/restfiles/fs/u/IJMP/text.txt")) == true
+                it?.requestLine?.matches(Regex("DELETE http://.*/zosmf/restfiles/fs/u/IJMP/text.txt HTTP/.*")) == true
             },
             { MockResponse().setResponseCode(204) }
         )
@@ -67,7 +65,7 @@ class ZosUssFileTest {
 
         responseDispatcher.injectEndpoint(
             {
-                it?.path?.matches(Regex("http://.*/zosmf/restfiles/fs/u/IJMP/text.txt")) == true //&&
+                it?.requestLine?.matches(Regex("POST http://.*/zosmf/restfiles/fs/u/IJMP/text.txt HTTP/.*")) == true //&&
                         //Gson().fromJson(String(it.body), CreateUssFile::class.java) == params
             },
             { MockResponse().setResponseCode(201) }
@@ -89,7 +87,7 @@ class ZosUssFileTest {
 
         responseDispatcher.injectEndpoint(
             {
-                it?.path?.matches(Regex("http://.*/zosmf/restfiles/fs/u/IJMP/newdir")) == true //&&
+                it?.requestLine?.matches(Regex("POST http://.*/zosmf/restfiles/fs/u/IJMP/newdir HTTP/.*")) == true //&&
                 //Gson().fromJson(String(it.body), CreateUssFile::class.java) == params
             },
             { MockResponse().setResponseCode(201) }
@@ -108,7 +106,7 @@ class ZosUssFileTest {
 
         responseDispatcher.injectEndpoint(
             {
-                it?.path?.matches(Regex("http://.*/zosmf/restfiles/fs/u/IJMP/text.txt")) == true
+                it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restfiles/fs/u/IJMP/text.txt HTTP/.*")) == true
             },
             { MockResponse().setResponseCode(201) }
         )

@@ -1,7 +1,8 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z
+package common
 
+import eu.ibagroup.r2z.BytesConverterFactory
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -38,7 +39,7 @@ open class BaseTest {
     return try {
 
 
-      val trustAllCerts: Array<TrustManager> = arrayOf<TrustManager>(
+      val trustAllCerts: Array<TrustManager> = arrayOf(
         object : X509TrustManager {
           @Throws(CertificateException::class)
           override fun checkClientTrusted(
@@ -62,7 +63,7 @@ open class BaseTest {
       val sslContext: SSLContext = SSLContext.getInstance("TLSv1.2")
       sslContext.init(null, trustAllCerts, SecureRandom())
 
-      val sslSocketFactory: SSLSocketFactory = sslContext.getSocketFactory()
+      val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
       val builder = OkHttpClient.Builder()
       builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
       builder.hostnameVerifier(object : HostnameVerifier {

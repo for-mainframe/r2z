@@ -41,3 +41,23 @@ if (response.isSuccessful){
 }
 ```
 Please note that in order to create API stub, you have to specify that the response should be converted by gson. And that's how you can easily use r2z.
+
+## How to run tests
+
+### Unit tests
+To run unit tests:
+```
+./gradlew test -x signArchives
+```
+### Integration tests
+**NOTE:** integration tests use a specific environment. To test their correctness, you need either create the compliant one, or change the tests
+
+Before running integration tests, you need three variables to be set up:
+- ``ZOSMF_TEST_URL`` - URL of the real mainframe with z/OSMF API to run the tests
+- ``ZOSMF_TEST_USERNAME`` - username with appropriate permissions to run the tests
+- ``ZOSMF_TEST_PASSWORD`` - user password to run the tests
+
+To run integration tests:
+```
+./gradlew intTest
+```
