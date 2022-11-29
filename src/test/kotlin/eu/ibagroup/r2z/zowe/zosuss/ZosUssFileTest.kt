@@ -115,5 +115,23 @@ class ZosUssFileTest {
 
         responseDispatcher.clearValidationList()
     }
+
+    @Test
+    fun writeToFileBin() {
+        val connection = ZOSConnection(TEST_HOST, TEST_PORT, TEST_USER, TEST_PASSWORD, "http")
+        val zosUssFile = ZosUssFile(connection, proxyClient)
+        val text = "Hello There!"
+
+        responseDispatcher.injectEndpoint(
+            {
+                it?.requestLine?.matches(Regex("PUT http://.*/zosmf/restfiles/fs/u/IJMP/file HTTP/.*")) == true
+            },
+            { MockResponse().setResponseCode(201) }
+        )
+        val response = zosUssFile.writeToFileBin("/u/IJMP/file", text.toByteArray())
+        Assertions.assertEquals(201, response.code())
+
+        responseDispatcher.clearValidationList()
+    }
 }
 
