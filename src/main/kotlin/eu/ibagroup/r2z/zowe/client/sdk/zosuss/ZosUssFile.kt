@@ -72,7 +72,7 @@ class ZosUssFile (
      */
     fun writeToFile(filePath: String, text: ByteArray): Response<*> {
         val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
-        val dataApi = buildApi<DataAPI>(url, httpClient)
+        val dataApi = buildApiWithBytesConverter<DataAPI>(url, httpClient)
         val call = dataApi.writeToUssFile(
             authorizationToken = Credentials.basic(connection.user, connection.password),
             filePath = FilePath(filePath),
