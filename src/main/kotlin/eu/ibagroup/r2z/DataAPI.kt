@@ -461,7 +461,7 @@ interface DataAPI {
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
     @Body body: CopyDataUSS.CopyFromFileOrDir,
-    @Path("filepath-name") filePath: FilePath,
+    @Path("filepath-name", encoded = true) filePath: FilePath,
   ): Call<Void>
 
   /**
