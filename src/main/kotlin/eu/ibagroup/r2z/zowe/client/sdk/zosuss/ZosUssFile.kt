@@ -84,4 +84,28 @@ class ZosUssFile (
         }
         return response ?: throw Exception("No response returned")
     }
+
+    /**
+     * Writes to USS binary file. Creates new if not exist
+     *
+     * @param filePath path of the file or directory (e.g. u/jiahj/text.txt)
+     * @param inputFile file to be written to
+     * @return http response object
+     * @throws Exception error processing request
+     */
+    fun writeToFileBin(filePath: String, inputFile: ByteArray): Response<*> {
+        val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
+        val dataApi = buildApi<DataAPI>(url, httpClient)
+        val call = dataApi.writeToUssFile(
+            authorizationToken = Credentials.basic(connection.user, connection.password),
+            filePath = FilePath(filePath),
+            body = inputFile,
+            xIBMDataType = XIBMDataType(XIBMDataType.Type.BINARY)
+        )
+        response = call.execute()
+        if (response?.isSuccessful != true) {
+            throw Exception(response?.errorBody()?.string())
+        }
+        return response ?: throw Exception("No response returned")
+    }
 }
