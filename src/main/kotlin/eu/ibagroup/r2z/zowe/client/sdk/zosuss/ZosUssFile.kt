@@ -95,12 +95,13 @@ class ZosUssFile (
      */
     fun writeToFileBin(filePath: String, inputFile: ByteArray): Response<*> {
         val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
-        val dataApi = buildApi<DataAPI>(url, httpClient)
+        val dataApi = buildApiWithBytesConverter<DataAPI>(url, httpClient)
         val call = dataApi.writeToUssFile(
             authorizationToken = Credentials.basic(connection.user, connection.password),
             filePath = FilePath(filePath),
             body = inputFile,
-            xIBMDataType = XIBMDataType(XIBMDataType.Type.BINARY)
+            xIBMDataType = XIBMDataType(XIBMDataType.Type.BINARY),
+            contentType = "application/octet-stream"
         )
         response = call.execute()
         if (response?.isSuccessful != true) {
