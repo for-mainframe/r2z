@@ -1,0 +1,13 @@
+{
+  "zos_version": "04.28.00",
+  "zosmf_port": "1443",
+  "zosmf_version": "28",
+  "zosmf_hostname": "stuff",
+  "plugins": {
+    "msgId": "IZUG612E",
+    "msgText": "IZUG612E"
+  },
+  "zosmf_saf_realm": "SAFRealm",
+  "zosmf_full_version": "28.0",
+  "api_version": "1"
+}

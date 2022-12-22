@@ -2,8 +2,13 @@
 
 package eu.ibagroup.r2z
 
+import com.google.gson.Gson
+import com.google.gson.TypeAdapter
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 import eu.ibagroup.r2z.annotations.ZVersion
 
 data class InfoResponse (
@@ -24,6 +29,7 @@ data class InfoResponse (
   val zosmfHostname: String = "null",
 
   @SerializedName("plugins")
+  @JsonAdapter(PluginsAdapter::class)
   @Expose
   val plugins: List<Plugin> = emptyList(),
 
@@ -46,4 +52,22 @@ data class InfoResponse (
     "04.28.00" -> ZVersion.ZOS_2_5
     else -> ZVersion.ZOS_2_1
   }
+}
+
+class PluginsAdapter : TypeAdapter<List<Plugin>>() {
+  private val gson = Gson()
+  override fun write(out: JsonWriter?, value: List<Plugin>?) {
+    gson.toJson(value, List::class.java, out)
+  }
+
+  override fun read(reader: JsonReader): List<Plugin> {
+    var result = listOf<Plugin>()
+    runCatching {
+      result = gson.fromJson(reader, List::class.java)
+    }.onFailure {
+      reader.skipValue()
+    }
+    return result
+  }
+
 }
