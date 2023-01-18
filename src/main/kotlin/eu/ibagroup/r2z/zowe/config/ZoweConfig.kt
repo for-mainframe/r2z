@@ -13,7 +13,6 @@ package eu.ibagroup.r2z.zowe.config
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
-import eu.ibagroup.r2z.CodePage
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
 import java.io.File
 import java.lang.IllegalStateException
@@ -311,10 +310,6 @@ class ZoweConfig(
   var responseTimeout: Long
     get() = searchProperty("responseTimeout") { zosmf(); base() } as Long? ?: 600
     set(el) { updateProperty("responseTimeout", el) { zosmf(); base() } }
-
-  var codePage: CodePage
-    get() = CodePage.valueOf("IBM_${(searchProperty("codePage") { tso(); base() } as String).filter { it.isDigit() }}")
-    set(el) { updateProperty("codePage", el.codePage.filter { it.isDigit() }) { tso(); base() } }
 
   /**
    * Searches profile by its path. For example if profile has path "gr1.example" then it will search
