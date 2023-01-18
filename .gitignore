@@ -3,9 +3,9 @@
 .idea/modules
 .idea/.gitignore
 build
-gradle
 .gradle
 .gradle.properties
 bin
 .vscode
+gradle/wrapper/gradle-wrapper.jar
 gradle.properties.for-release
