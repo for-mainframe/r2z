@@ -21,7 +21,7 @@ data class ConsoleResponse(
   val zosmfResponse: IssueResponse? = null,
 
   /**
-   * If an error occurs, returns the ImperativeError, which contains case error.
+   * If an error occurs, returns the [ImperativeError], which contains case error.
    */
   val failureResponse: String? = null,
 

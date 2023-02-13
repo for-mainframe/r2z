@@ -6,7 +6,7 @@ package eu.ibagroup.r2z.zowe.client.sdk.core
  * z/OS Connection information placeholder
  *
  * @author Frank Giordano
- * @version 1.0
+ * @author Uladzislau Kalesnikau
  */
 class ZOSConnection(
   /**
@@ -22,7 +22,7 @@ class ZOSConnection(
    */
   val user: String,
   /**
-   * machine host username's password with access to backend z/OS instance
+   * machine host username\'s password with access to backend z/OS instance
    */
   val password: String,
   /**

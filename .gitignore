@@ -2,6 +2,7 @@
 .idea/*.iml
 .idea/modules
 .idea/.gitignore
+.idea/codeStyles
 build
 .gradle
 .gradle.properties

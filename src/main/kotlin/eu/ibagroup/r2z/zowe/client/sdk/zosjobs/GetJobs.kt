@@ -37,7 +37,7 @@ class GetJobs(
   /**
    * Get jobs that match a job name by prefix. Defaults to job(s) owned by the user ID in the session.
    *
-   * @param prefix job name prefix for which to list jobs. Supports wildcard e.g. JOBNM*
+   * @param prefix job name prefix for which to list jobs. Supports wildcard e.g. JOBNM\*
    * @return list of job objects (matching jobs)
    * @throws Exception error on getting a list of jobs
    */
@@ -52,7 +52,7 @@ class GetJobs(
    * Get jobs that are owned by a certain user or pattern of users.
    *
    * @param owner owner for which to get jobs. Supports wildcard e.g.
-   *              IBMU* returns jobs owned by all users whose ID beings with "IBMU"
+   *              IBMU\* returns jobs owned by all users whose ID beings with "IBMU"
    * @return list of job objects (matching jobs)
    * @throws Exception error on getting a list of jobs
    */
@@ -67,9 +67,9 @@ class GetJobs(
    * Get a list of jobs that match an owner and prefix.
    *
    * @param owner  owner for which to get jobs. Supports wildcard e.g.
-   *               IBMU* returns jobs owned by all users whose ID beings with "IBMU"
+   *               IBMU\* returns jobs owned by all users whose ID beings with "IBMU"
    * @param prefix prefix for which to get jobs. Supports wildcard e.g.
-   *               JOBNM* returns jobs with names starting with "JOBNM"
+   *               JOBNM\* returns jobs with names starting with "JOBNM"
    * @return list of job objects (matching jobs)
    * @throws Exception error on getting a list of jobs
    */
@@ -105,7 +105,7 @@ class GetJobs(
   /**
    * Get jobs filtered by owner and prefix.
    *
-   * @param params get job parameters, see GetJobParams object
+   * @param params [GetJobParams] object
    * @return list of job objects (matching jobs)
    * @throws Exception error on getting a list of jobs
    */
@@ -188,7 +188,7 @@ class GetJobs(
   /**
    * Get the status and other details (e.g. owner, return code) for a job.
    *
-   * @param params common job parameters, see CommonJobParams object
+   * @param params [CommonJobParams] object
    * @return job document (matching job)
    * @throws Exception error getting job status
    */
@@ -223,7 +223,7 @@ class GetJobs(
    * Get a list of all job spool files for a job.
    *
    * @param params common job parameters, see CommonJobParams object
-   * @return list of SpoolFile objects
+   * @return list of [SpoolFile] objects
    * @throws Exception error on getting spool files info
    */
   @Suppress("UNCHECKED_CAST")
@@ -248,7 +248,7 @@ class GetJobs(
    * other APIs such as SubmitJobs.
    *
    * @param job job for which you would like to get a list of job spool files
-   * @return list of SpoolFile objects
+   * @return list of [SpoolFile] objects
    * @throws Exception error on getting spool files info
    */
   fun getSpoolFilesForJob(job: Job): List<SpoolFile> {
@@ -264,7 +264,7 @@ class GetJobs(
   /**
    * Get the JCL that was used to submit a job.
    *
-   * @param params common job parameters, see CommonJobParams object
+   * @param params [CommonJobParams] object
    * @return JCL content
    * @throws Exception error on getting jcl content
    */
