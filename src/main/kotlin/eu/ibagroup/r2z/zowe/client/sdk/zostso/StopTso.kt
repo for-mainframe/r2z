@@ -30,7 +30,7 @@ class StopTso(
    * Stop TSO address space and populates response with [StartStopResponse]
    *
    * @param servletKey unique servlet entry identifier
-   * @return start stop response, see [StartStopResponse] object
+   * @return [StartStopResponse] object
    * @throws Exception error on TSO sto command
    */
   fun stop(servletKey: String): StartStopResponse {
@@ -56,8 +56,8 @@ class StopTso(
   /**
    * Sends REST call to z/OSMF for stopping active TSO address space
    *
-   * @param commandParams command parameters, see [StopTsoParams]
-   * @return z/OSMF response object, see [TsoResponse] object
+   * @param commandParams [StopTsoParams] command parameters
+   * @return [TsoResponse] z/OSMF response object
    * @throws Exception error on TSO sto command
    */
   fun stopCommon(commandParams: StopTsoParams): TsoResponse {

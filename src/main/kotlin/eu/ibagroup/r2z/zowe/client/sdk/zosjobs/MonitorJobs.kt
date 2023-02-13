@@ -34,9 +34,7 @@ class MonitorJobs(
   /**
    * Given a Job document (has jobname/jobid), waits for the status of the job to be "OUTPUT". This API will poll for
    * the OUTPUT status once every 3 seconds indefinitely. If the polling interval/duration is NOT sufficient, use
-   * "waitForStatusCommon" to adjust.
-   * <p>
-   * See JSDoc for "waitForStatusCommon" for full details on polling and other logic.
+   * [waitForStatusCommon] to adjust.
    *
    * @param job document of the z/OS job to wait for (see z/OSMF Jobs APIs for details)
    * @return job document
@@ -52,10 +50,7 @@ class MonitorJobs(
   /**
    * Given the jobname/jobid, waits for the status of the job to be "OUTPUT". This API will poll for the OUTPUT status
    * once every 3 seconds indefinitely. If the polling interval/duration is NOT sufficient, use
-   * "waitForStatusCommon" to adjust.
-   *
-   *
-   * See JavaDoc for "waitForStatusCommon" for full details on polling and other logic.
+   * [waitForStatusCommon] to adjust.
    *
    * @param jobName the z/OS jobname of the job to wait for output status (see z/OSMF Jobs APIs for details)
    * @param jobId   the z/OS jobid of the job to wait for output status (see z/OSMF Jobs APIS for details)
@@ -78,7 +73,7 @@ class MonitorJobs(
    * than the current status of the job, then the method returns immediately (since the job will never enter the
    * requested status) with the current status of the job.
    *
-   * @param params monitor jobs parameters, see MonitorJobWaitForParams object
+   * @param params [MonitorJobWaitForParams] object
    * @return job document
    * @throws Exception error processing wait check request
    */
@@ -98,7 +93,7 @@ class MonitorJobs(
   /**
    * "Polls" (sets timeouts and continuously checks) for the status of the job to match the desired status.
    *
-   * @param params monitor jobs params, see MonitorJobWaitForParams
+   * @param params [MonitorJobWaitForParams] object
    * @return job document
    * @throws Exception error processing poll check request
    */
@@ -128,7 +123,7 @@ class MonitorJobs(
   /**
    * Checks the status of the job for the expected status (OR that the job has progressed passed the expected status).
    *
-   * @param params monitor jobs params, see MonitorJobWaitForParams
+   * @param params [MonitorJobWaitForParams] object
    * @return boolean true when the job status is obtained
    * @throws Exception error processing check request
    */
@@ -168,7 +163,7 @@ class MonitorJobs(
   /**
    * Checks if the given message is within the job output within line limit.
    *
-   * @param params monitor jobs params, see MonitorJobWaitForParams
+   * @param params [MonitorJobWaitForParams] object
    * @param message message string
    * @return boolean message found status
    * @throws Exception error processing check request
@@ -201,7 +196,7 @@ class MonitorJobs(
   /**
    * "Polls" (sets timeouts and continuously checks) for the given message within the job output.
    *
-   * @param params monitor jobs params, see MonitorJobWaitForParams
+   * @param params [MonitorJobWaitForParams] object
    * @param message message string
    * @return boolean message found status
    * @throws Exception error processing poll check request
@@ -230,7 +225,7 @@ class MonitorJobs(
   /**
    * Determines if a given job is in a running state or not.
    *
-   * @param params monitor jobs params, see MonitorJobWaitForParams
+   * @param params [MonitorJobWaitForParams] object
    * @return true if in running state
    * @throws Exception error processing running status check
    */
@@ -246,7 +241,7 @@ class MonitorJobs(
   /**
    * Given jobname/jobid, checks for the desired message continuously (based on the interval and attempts specified).
    *
-   * @param params monitor jobs parameters, see MonitorJobWaitForParams object
+   * @param params [MonitorJobWaitForParams] object
    * @param message message string
    * @return job document
    * @throws Exception error processing wait check request
@@ -268,7 +263,7 @@ class MonitorJobs(
   /**
    * Given a Job document (has jobname/jobid), waits for the given message from the job. This API will poll for
    * the given message once every 3 seconds for at least 1000 times. If the polling interval/duration is NOT
-   * sufficient, use "waitForMessageCommon" method to adjust.
+   * sufficient, use [waitForMessageCommon] method to adjust.
    *
    * @param job document of the z/OS job to wait for (see z/OSMF Jobs APIs for details)
    * @param message message string
@@ -290,9 +285,7 @@ class MonitorJobs(
   /**
    * Given a Job document (has jobname/jobid), waits for the given status of the job. This API will poll for
    * the given status once every 3 seconds for at least 1000 times. If the polling interval/duration is NOT
-   * sufficient, use "waitForStatusCommon" method to adjust.
-   * <p>
-   * See JavaDoc for "waitForStatusCommon" for full details on polling and other logic.
+   * sufficient, use [waitForStatusCommon] method to adjust.
    *
    * @param job        document of the z/OS job to wait for (see z/OSMF Jobs APIs for details)
    * @param statusType status type, see JobStatus.Type object
@@ -309,7 +302,7 @@ class MonitorJobs(
   /**
    * Given the jobname/jobid, waits for the given status of the job. This API will poll for the given status once
    * every 3 seconds for at least 1000 times. If the polling interval/duration is NOT sufficient, use
-   * "waitForStatusCommon" method to adjust.
+   * [waitForStatusCommon] method to adjust.
    *
    * @param jobName the z/OS jobname of the job to wait for output status (see z/OSMF Jobs APIs for details)
    * @param jobId the z/OS jobid of the job to wait for output status (see z/OSMF Jobs APIS for details)

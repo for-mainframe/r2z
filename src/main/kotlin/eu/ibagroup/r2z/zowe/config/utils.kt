@@ -79,9 +79,9 @@ private fun formProfiles (profiles: Map<String, ZoweConfigProfile>?) {
 }
 
 /**
- * Parses json string to ZoweConfig object model.
- * @param configString - json string with zowe config.
- * @return ZoweConfig object model.
+ * Parses JSON string to [ZoweConfig] object model.
+ * @param configString JSON string with zowe config.
+ * @return [ZoweConfig] object model.
  */
 fun parseConfigJson(configString: String): ZoweConfig {
   val zoweConfig = Gson().fromJson(configString, ZoweConfig::class.java)
@@ -105,32 +105,32 @@ fun parseConfigJson (inputStream: InputStream): ZoweConfig = parseConfigJson(Str
 interface KeytarWrapper {
   /**
    * Returns a password by service name and account.
-   * @param service - service name.
-   * @param account - account name.
+   * @param service service name.
+   * @param account account name.
    * @return extracted password.
    */
   fun getPassword(service: String, account: String): String
 
   /**
    * Updates or creates password for account of service.
-   * @param service - service name.
-   * @param account - account name
+   * @param service service name.
+   * @param account account name
    * @return Nothing.
    */
   fun setPassword(service: String, account: String, password: String)
 
   /**
    * Removes credentials for account in service. If account in service is single than it removes a service.
-   * @param service - service name.
-   * @param account - account name.
+   * @param service service name.
+   * @param account account name.
    * @return true if success and false otherwise.
    */
   fun deletePassword(service: String, account: String): Boolean
 
   /**
    * Extracts all credentials for service.
-   * @param service - service name.
-   * @return Map where key is account name in service and value is password for this account.
+   * @param service service name.
+   * @return [Map] where key is account name in service and value is password for this account.
    */
   fun getCredentials(service: String): Map<String, String>
 }

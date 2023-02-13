@@ -51,7 +51,7 @@ class DeleteJobs(
   /**
    * Delete a job that resides in a z/OS data set.
    *
-   * @param params delete job parameters, see ModifyJobParams object
+   * @param params [ModifyJobParams] delete job parameters
    * @return job document with details about the deleted job
    * @throws Exception error on deleting
    */

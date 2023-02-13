@@ -43,7 +43,7 @@ class ZosUssFile (
      * Creates a new file or directory with specified parameters
      *
      * @param filePath path of the file or directory (e.g. u/jiahj/text.txt)
-     * @param params create USS file parameters, see CreateUssFile class
+     * @param params [CreateUssFile] parameters
      * @return http response object
      * @throws Exception error processing request
      */

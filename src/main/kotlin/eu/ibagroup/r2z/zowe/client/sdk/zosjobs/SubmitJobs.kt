@@ -27,7 +27,7 @@ class SubmitJobs(
   /**
    * Submit a job that resides in a z/OS data set.
    *
-   * @param jobDataSet job Dataset to be translated into SubmitJobParams object
+   * @param jobDataSet job Dataset to be translated into [SubmitJobParams] object
    * @return job document with details about the submitted job
    * @throws Exception error on submitting
    */
@@ -38,7 +38,7 @@ class SubmitJobs(
   /**
    * Submit a job that resides in a z/OS data set.
    *
-   * @param params submit job parameters, see SubmitJobParams object
+   * @param params [SubmitJobParams] object
    * @return job document with details about the submitted job
    * @throws Exception error on submitting
    */
@@ -75,7 +75,7 @@ class SubmitJobs(
   /**
    * Submit a JCL string to run
    *
-   * @param params submit jcl parameters, see SubmitJclParams object
+   * @param params [SubmitJclParams] object
    * @return job document with details about the submitted job
    * @throws Exception error on submitting
    */

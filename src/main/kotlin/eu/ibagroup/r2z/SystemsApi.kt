@@ -12,8 +12,8 @@ interface SystemsApi {
 
     /**
      * An API function to get all available systems defined to z/OSMF
-     * @param authToken - is a base 64 encoding representation of <userid>:<password>
-     * @return a wrapped instance of SystemsResponse
+     * @param authToken is a base 64 encoding representation of *userid*:*password*
+     * @return a wrapped instance of [SystemsResponse]
      */
     @AvailableSince(ZVersion.ZOS_2_1)
     @GET("zosmf/resttopology/systems")
@@ -22,4 +22,3 @@ interface SystemsApi {
     ): Call<SystemsResponse>
 
 }
-

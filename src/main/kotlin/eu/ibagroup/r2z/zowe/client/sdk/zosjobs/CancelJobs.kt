@@ -51,7 +51,7 @@ class CancelJobs(
   /**
    * Cancel a job that resides in a z/OS data set.
    *
-   * @param params cancel job parameters, see ModifyJobParams object
+   * @param params [ModifyJobParams] cancel job parameters
    * @return job document with details about the canceled job
    * @throws Exception error canceling
    */

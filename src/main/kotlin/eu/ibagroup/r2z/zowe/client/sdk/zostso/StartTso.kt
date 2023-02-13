@@ -27,8 +27,8 @@ class StartTso(
    * Start TSO address space with provided parameters.
    *
    * @param accountNumber this key of StartTsoParams required, because it cannot be default.
-   * @param params        optional object with required parameters, see [StartTsoParams]
-   * @return command response on resolve, see [StartStopResponses]
+   * @param params        optional [StartTsoParams] object with required parameters
+   * @return [StartStopResponses] command response on resolve
    * @throws Exception error executing command
    */
   @Throws(Exception::class)
@@ -61,8 +61,8 @@ class StartTso(
   /**
    * Start TSO address space with provided parameters
    *
-   * @param commandParams object with required parameters, see [StartTsoParams]
-   * @return z/OSMF response object, see [TsoResponse]
+   * @param commandParams [StartTsoParams] object with required parameters
+   * @return [TsoResponse] z/OSMF response object
    * @throws Exception error executing command
    */
   @Throws(Exception::class)

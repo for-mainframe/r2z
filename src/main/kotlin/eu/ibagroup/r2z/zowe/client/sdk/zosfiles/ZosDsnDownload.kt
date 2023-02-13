@@ -14,7 +14,7 @@ import retrofit2.Response
 import java.io.InputStream
 
 /**
- * ZosDsnDownload class that provides download DataSet function
+ * [ZosDsnDownload] class that provides download DataSet function
  */
 class ZosDsnDownload (
   var connection: ZOSConnection,
@@ -32,7 +32,7 @@ class ZosDsnDownload (
    *
    * @param datasetName name of a sequential dataset e.g. DATASET.SEQ.DATA
    *                    or a dataset member e.g. DATASET.LIB(MEMBER))
-   * @param params      download params parameters, see DownloadParams
+   * @param params [DownloadParams]
    * @return a content stream
    * @throws Exception error processing request
    */

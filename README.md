@@ -42,6 +42,14 @@ if (response.isSuccessful){
 ```
 Please note that in order to create API stub, you have to specify that the response should be converted by gson. And that's how you can easily use r2z.
 
+## Documentation with Dokka
+
+To build Dokka documentattion, run:
+```
+./gradlew dokkaHtml
+```
+Docs will be added to *build/dokka/html*
+
 ## How to run tests
 
 ### Unit tests

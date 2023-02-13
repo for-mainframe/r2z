@@ -26,8 +26,8 @@ class IssueCommand(
    * Issue an MVS console command, returns "raw" z/OSMF response
    *
    * @param consoleName string name of the mvs console that is used to issue the command
-   * @param commandParams synchronous console issue parameters, see [IssueRequestBody] object
-   * @return command response on resolve, see [IssueResponse] object
+   * @param commandParams [IssueRequestBody] synchronous console issue parameters
+   * @return [IssueResponse] command response on resolve
    * @throws Exception processing error
    */
   fun issueCommon(consoleName: String, commandParams: IssueRequestBody): IssueResponse {
@@ -56,8 +56,8 @@ class IssueCommand(
   /**
    * Issue an MVS console command in default console, returns "raw" z/OSMF response
    *
-   * @param commandParams synchronous console issue parameters, see [IssueRequestBody] object
-   * @return command response on resolve, see [IssueResponse] object
+   * @param commandParams [IssueRequestBody] synchronous console issue parameters
+   * @return [IssueResponse] command response on resolve
    * @throws Exception processing error
    */
   fun issueDefConsoleCommon(commandParams: IssueRequestBody): IssueResponse {
@@ -69,8 +69,8 @@ class IssueCommand(
    * immediately after the command is issued. However, after (according to the z/OSMF REST API documentation)
    * approximately 3 seconds the response will be returned.
    *
-   * @param params console issue parameters, see [IssueRequestBody] object
-   * @return command response on resolve, see ConsoleResponse object
+   * @param params [IssueRequestBody] console issue parameters
+   * @return [ConsoleResponse] on resolve
    * @throws Exception processing error
    */
   fun issue(params: IssueRequestBody): ConsoleResponse {
@@ -99,7 +99,7 @@ class IssueCommand(
    * Simple issue console command method. Does not accept parameters, so all defaults on the z/OSMF API are taken.
    *
    * @param command string command to issue
-   * @return command response on resolve, see [ConsoleResponse] object
+   * @return [ConsoleResponse] object on resolve
    * @throws Exception processing error
    */
   fun issueSimple(command: String): ConsoleResponse {

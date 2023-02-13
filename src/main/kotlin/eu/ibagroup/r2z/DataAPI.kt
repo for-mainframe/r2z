@@ -259,9 +259,12 @@ interface DataAPI {
 
   /**
    * Copy from - to
-   * SEQ -> SEQ
-   * PDS MEMBER -> SEQ (overwrites content)
-   * PDS MEMBER or MEMBERS -> PDS (adds or replaces)
+   *
+   * **SEQ** -> **SEQ**
+   *
+   * **PDS MEMBER** -> **SEQ** (overwrites content)
+   *
+   * **PDS MEMBER or MEMBERS** -> **PDS** (adds or replaces)
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/{to-data-set-name}")
@@ -275,10 +278,14 @@ interface DataAPI {
 
   /**
    * Volser for uncatalogued datasets
+   *
    * Copy from - to
-   * SEQ -> SEQ
-   * PDS MEMBER -> SEQ
-   * PDS MEMBER or MEMBERS -> PDS
+   *
+   * **SEQ** -> **SEQ**
+   *
+   * **PDS MEMBER** -> **SEQ**
+   *
+   * **PDS MEMBER** or **MEMBERS** -> **PDS**
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/-({to-volser})/{to-data-set-name}")
@@ -292,8 +299,9 @@ interface DataAPI {
   ): Call<Void>
 
   /**
-   * SEQ -> PDS MEMBER
-   * PDS MEMBER -> PDS MEMBER
+   * **SEQ** -> **PDS MEMBER**
+   *
+   * **PDS MEMBER** -> **PDS MEMBER**
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/{to-data-set-name}({member-name})")
@@ -307,9 +315,11 @@ interface DataAPI {
   ): Call<Void>
 
   /**
-   * Volser for uncatalogued datasets
-   * SEQ -> PDS MEMBER
-   * PDS MEMBER -> PDS MEMBER
+   * Volser for uncatalogued
+   *
+   * **SEQ** -> **PDS MEMBER**
+   *
+   * **PDS MEMBER** -> **PDS MEMBER**
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/-({to-volser})/{to-data-set-name}({member-name})")
@@ -324,7 +334,7 @@ interface DataAPI {
   ): Call<Void>
 
   /**
-   * USS FILE -> SEQ (truncates contents)
+   * **USS FILE** -> **SEQ** (truncates contents)
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/{to-data-set-name}")
@@ -337,7 +347,7 @@ interface DataAPI {
   ): Call<Void>
 
   /**
-   * USS FILE -> PDS MEMBER
+   * **USS FILE** -> **PDS MEMBER**
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/{to-data-set-name}({member-name})")
@@ -465,9 +475,11 @@ interface DataAPI {
   ): Call<Void>
 
   /**
-   * SEQ -> USS FILE
-   * PDS MEMBER -> USS FILE
-   * PDS -> USS DIR doesn't work
+   * **SEQ** -> **USS FILE**
+   *
+   * **PDS MEMBER** -> **USS FILE**
+   *
+   * **WARNING:** PDS -> USS DIR doesn't work
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/fs/{filepath-name}")

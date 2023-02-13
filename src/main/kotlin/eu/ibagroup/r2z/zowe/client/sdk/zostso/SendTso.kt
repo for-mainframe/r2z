@@ -28,7 +28,7 @@ class SendTso(
    * Create Response
    *
    * @param responses responses from CollectedResponses object
-   * @return SendResponse, see [SendResponse]
+   * @return [SendResponse]
    */
   @Throws(Exception::class)
   private fun createResponse(responses: CollectedResponses): SendResponse {
@@ -43,7 +43,7 @@ class SendTso(
    * Collects responses from address space until it reaches prompt
    *
    * @param tsoResponse object from first Tso response from witch responses are needed, see [TsoResponse]
-   * @return CollectedResponses response object, see [CollectedResponses]
+   * @return [CollectedResponses] response object
    * @throws Exception error executing command
    */
   @Throws(Exception::class)
@@ -87,7 +87,7 @@ class SendTso(
    * Retrieve tso http request response
    *
    * @param servletKey key of tso address space
-   * @return z/OSMF tso response, see [TsoResponse]
+   * @return z/OSMF [TsoResponse]
    * @throws Exception error executing command
    */
   @Throws(Exception::class)
@@ -110,7 +110,7 @@ class SendTso(
    *
    * @param command    to send to the TSO address space.
    * @param servletKey returned from a successful start
-   * @return response object, see [SendResponse]
+   * @return [SendResponse] object
    * @throws Exception error executing command
    */
   @Throws(Exception::class)
@@ -133,8 +133,8 @@ class SendTso(
   /**
    * API method to send data to already started TSO address space
    *
-   * @param commandParams object with required parameters, see [SendTsoParams] object
-   * @return response object, see [TsoResponse]
+   * @param commandParams [SendTsoParams] object with required parameters
+   * @return [TsoResponse] object
    * @throws Exception error executing command
    */
   @Throws(Exception::class)
