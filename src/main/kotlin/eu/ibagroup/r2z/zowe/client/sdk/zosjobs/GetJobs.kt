@@ -37,7 +37,7 @@ class GetJobs(
   /**
    * Get jobs that match a job name by prefix. Defaults to job(s) owned by the user ID in the session.
    *
-   * @param prefix job name prefix for which to list jobs. Supports wildcard e.g. JOBNM\*
+   * @param prefix job name prefix for which to list jobs. Supports wildcard e.g. JOBNM*
    * @return list of job objects (matching jobs)
    * @throws Exception error on getting a list of jobs
    */
@@ -52,7 +52,7 @@ class GetJobs(
    * Get jobs that are owned by a certain user or pattern of users.
    *
    * @param owner owner for which to get jobs. Supports wildcard e.g.
-   *              IBMU\* returns jobs owned by all users whose ID beings with "IBMU"
+   *              IBMU* returns jobs owned by all users whose ID beings with "IBMU"
    * @return list of job objects (matching jobs)
    * @throws Exception error on getting a list of jobs
    */
@@ -67,9 +67,9 @@ class GetJobs(
    * Get a list of jobs that match an owner and prefix.
    *
    * @param owner  owner for which to get jobs. Supports wildcard e.g.
-   *               IBMU\* returns jobs owned by all users whose ID beings with "IBMU"
+   *               IBMU* returns jobs owned by all users whose ID beings with "IBMU"
    * @param prefix prefix for which to get jobs. Supports wildcard e.g.
-   *               JOBNM\* returns jobs with names starting with "JOBNM"
+   *               JOBNM* returns jobs with names starting with "JOBNM"
    * @return list of job objects (matching jobs)
    * @throws Exception error on getting a list of jobs
    */
