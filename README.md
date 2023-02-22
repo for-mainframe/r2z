@@ -1,4 +1,4 @@
-# WARNING: THIS REPOSITORY IS MARKED AS 'DEPRECATED'. CONSIDER SWITCHING TO ZOWE CLIENT KOTLIN SDK WITH THE SIMILAR APPROACH TO WORK WITH Z/OSMF REST API ([link](https://github.com/zowe/zowe-client-kotlin-sdk))
+# WARNING: THIS REPOSITORY IS MARKED AS 'DEPRECATED' AND WON'T BE MAINTAINED. CONSIDER SWITCHING TO ZOWE CLIENT KOTLIN SDK WITH THE SIMILAR APPROACH TO WORK WITH Z/OSMF REST API ([link](https://github.com/zowe/zowe-client-kotlin-sdk))
 
 ## zOSMF Retrofit Library
 This library covert zOSMF Rest API with kotlin object oriented code using Retrofit. r2z will allow you to send http requests to your zOSMF.
