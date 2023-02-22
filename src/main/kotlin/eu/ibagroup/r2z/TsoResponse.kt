@@ -90,10 +90,10 @@ data class MessageData(
 )
 
 enum class TsoCodePage(val codePage: String) {
-  IBM_1025("1025"),
-  IBM_1047("1047");
+ IBM_1025("1025"),
+ IBM_1047("1047");
 
-  override fun toString(): String {
-    return codePage
-  }
+ override fun toString(): String {
+   return codePage
+ }
 }

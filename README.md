@@ -1,3 +1,5 @@
+# WARNING: THIS REPOSITORY IS MARKED AS 'DEPRECATED' AND WON'T BE MAINTAINED. CONSIDER SWITCHING TO ZOWE CLIENT KOTLIN SDK WITH THE SIMILAR APPROACH TO WORK WITH Z/OSMF REST API ([link](https://github.com/zowe/zowe-client-kotlin-sdk))
+
 ## zOSMF Retrofit Library
 This library covert zOSMF Rest API with kotlin object oriented code using Retrofit. r2z will allow you to send http requests to your zOSMF.
 
@@ -41,6 +43,14 @@ if (response.isSuccessful){
 }
 ```
 Please note that in order to create API stub, you have to specify that the response should be converted by gson. And that's how you can easily use r2z.
+
+## Documentation with Dokka
+
+To build Dokka documentattion, run:
+```
+./gradlew dokkaHtml
+```
+Docs will be added to *build/dokka/html*
 
 ## How to run tests
 

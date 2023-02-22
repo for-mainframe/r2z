@@ -12,7 +12,7 @@ import retrofit2.Response
 /**
  * ZosDsnList class that provides Dataset member list function
  *
- * @property connection connection information, see ZOSConnection object
+ * @property conenction [ZOSConnection] object connection information
  * @property httpClient okHttpClient
  */
 class ZosDsnList(
@@ -30,7 +30,7 @@ class ZosDsnList(
    * Get a list of Dataset names
    *
    * @param dataSetName name of a dataset
-   * @param params list parameters, see ListParams object
+   * @param params [ListParams] object
    * @return A String list of Dataset names
    * @throws Exception error processing request
    */
@@ -57,7 +57,7 @@ class ZosDsnList(
    * Get a list of members from a Dataset
    *
    * @param datasetName name of a dataset
-   * @param listParams list parameters, see ListParams object
+   * @param listParams [ListParams] object
    * @return list of member names
    * @throws Exception error processing request
    */

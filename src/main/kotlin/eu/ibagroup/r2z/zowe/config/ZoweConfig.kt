@@ -13,7 +13,6 @@ package eu.ibagroup.r2z.zowe.config
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
-import eu.ibagroup.r2z.CodePage
 import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
 import java.io.File
 import java.lang.IllegalStateException
@@ -40,7 +39,7 @@ class ZoweConfig(
 
   /**
    * Builder class for setting the sequence of profiles to search property by name.
-   * @param propName - property name to search.
+   * @param propName property name to search.
    */
   inner class PropertyBuilder(val propName: String) {
     var profilesToSearchProp = mutableListOf<ZoweConfigProfile?>()
@@ -117,10 +116,10 @@ class ZoweConfig(
   /**
    * Searches for a property with creating profiles sequence to search.
    * @see search
-   * @param propName - property name to search.
-   * @param block - extension function for PropertyBuilder class. This parameter is needed for
-   *                creating a sequence of profiles to search by invoking corresponding methods
-   *                in the right order.
+   * @param propName property name to search.
+   * @param block extension function for PropertyBuilder class. This parameter is needed for
+   *              creating a sequence of profiles to search by invoking corresponding methods
+   *              in the right order.
    * @return Property value.
    */
   fun searchProperty (propName: String, block: PropertyBuilder.() -> Unit): Any? {
@@ -130,10 +129,10 @@ class ZoweConfig(
   /**
    * Searches for a property and updates it in found profile with creating profiles sequence to search.
    * @see set
-   * @param propName - property name to search.
-   * @param block - extension function for PropertyBuilder class. This parameter is needed for
-   *                creating a sequence of profiles to search by invoking corresponding methods
-   *                in the right order.
+   * @param propName property name to search.
+   * @param block extension function for PropertyBuilder class. This parameter is needed for
+   *              creating a sequence of profiles to search by invoking corresponding methods
+   *              in the right order.
    * @return Nothing.
    */
   fun updateProperty (propName: String, propValue: Any?, block: PropertyBuilder.() -> Unit) {
@@ -144,7 +143,7 @@ class ZoweConfig(
    * Extracts and decodes config object of all files from credential storage.
    * @see KeytarWrapper
    * @see DefaultKeytarWrapper
-   * @param keytar - instance of KeytarWrapper class. This param is needed for accessing credential storage.
+   * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
    * @return Map where key is config file path and value is map of secure properties.
    *         For example:
    *         {
@@ -174,8 +173,8 @@ class ZoweConfig(
   /**
    * Extracts secure properties from secure store by zowe config file path in current instance.
    * @see readZoweCredentialsFromStorage
-   * @param filePath - path of zowe.config.json file. Secure props will be extracted by this parameter.
-   * @param keytar - instance of KeytarWrapper class. This param is needed for accessing credential storage.
+   * @param filePath path of zowe.config.json file. Secure props will be extracted by this parameter.
+   * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
    * @return Nothing.
    */
   fun extractSecureProperties (filePath: String, keytar: KeytarWrapper = DefaultKeytarWrapper()) {
@@ -196,9 +195,9 @@ class ZoweConfig(
   /**
    * Updates secure object for provided file in credential object and save these changes to credential storage.
    * @see readZoweCredentialsFromStorage
-   * @param filePath - path of zowe.config.json file. Secure props will be saved
-   *                   inside this property of connection object.
-   * @param keytar - instance of KeytarWrapper class. This param is needed for accessing credential storage.
+   * @param filePath path of zowe.config.json file. Secure props will be saved
+   *                 inside this property of connection object.
+   * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
    * @return Nothing.
    */
   fun saveSecureProperties (filePath: String, keytar: KeytarWrapper = DefaultKeytarWrapper()) {
@@ -228,9 +227,9 @@ class ZoweConfig(
   /**
    * Extracts secure properties from secure store by zowe config file path in current instance.
    * @see readZoweCredentialsFromStorage
-   * @param filePathTokens - path of zowe.config.json file splitted by delimiter.
-   *                         Secure props will be extracted by this parameter.
-   * @param keytar - instance of KeytarWrapper class. This param is needed for accessing credential storage.
+   * @param filePathTokens path of zowe.config.json file splitted by delimiter.
+   *                       Secure props will be extracted by this parameter.
+   * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
    * @return Nothing.
    */
   fun extractSecureProperties (filePathTokens: Array<String>, keytar: KeytarWrapper = DefaultKeytarWrapper()) {
@@ -240,9 +239,9 @@ class ZoweConfig(
   /**
    * Updates secure object for provided file in credential object and save these changes to credential storage.
    * @see readZoweCredentialsFromStorage
-   * @param filePath - path of zowe.config.json file splitted by delimiter.
-   *                   Secure props will be saved inside this property of connection object.
-   * @param keytar - instance of KeytarWrapper class. This param is needed for accessing credential storage.
+   * @param filePath path of zowe.config.json file splitted by delimiter.
+   *                 Secure props will be saved inside this property of connection object.
+   * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
    * @return Nothing.
    */
   fun saveSecureProperties (filePathTokens: Array<String>, keytar: KeytarWrapper = DefaultKeytarWrapper()) {
@@ -250,7 +249,7 @@ class ZoweConfig(
   }
 
   /**
-   * Deserializes current instance of ZoweConfig to json string without secure properties.
+   * Deserializes current [ZoweConfig] instance to JSON string without secure properties.
    * @return String with deserialized object.
    */
   fun toJson (): String {
@@ -265,9 +264,8 @@ class ZoweConfig(
   }
 
   /**
-   * Creates ZOSConnection based on zowe config or throws exception if data is not correct.
-   * @return ZOSConnection instance
-   * @see ZOSConnection
+   * Creates [ZOSConnection] based on zowe config or throws exception if data is not correct.
+   * @return [ZOSConnection] instance
    */
   fun toZosConnection(): ZOSConnection {
     if (host?.isEmpty() != false || port == null || user?.isEmpty() != false || password == null || protocol.isEmpty()){
@@ -312,15 +310,11 @@ class ZoweConfig(
     get() = searchProperty("responseTimeout") { zosmf(); base() } as Long? ?: 600
     set(el) { updateProperty("responseTimeout", el) { zosmf(); base() } }
 
-  var codePage: CodePage
-    get() = CodePage.valueOf("IBM_${(searchProperty("codePage") { tso(); base() } as String).filter { it.isDigit() }}")
-    set(el) { updateProperty("codePage", el.codePage.filter { it.isDigit() }) { tso(); base() } }
-
   /**
    * Searches profile by its path. For example if profile has path "gr1.example" then it will search
    * profile "example" in "gr1" group.
-   * @param searchPath - path to search profile
-   * @return found profile or null if searchPath is not valid or no one profile exists by this path
+   * @param searchPath path to search profile
+   * @return found profile or null if *searchPath* is not valid or no one profile exists by this path
    */
   fun profile(searchPath: String?): ZoweConfigProfile? {
     searchPath ?: return null

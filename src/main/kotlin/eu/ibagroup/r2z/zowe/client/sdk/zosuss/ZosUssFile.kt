@@ -43,7 +43,7 @@ class ZosUssFile (
      * Creates a new file or directory with specified parameters
      *
      * @param filePath path of the file or directory (e.g. u/jiahj/text.txt)
-     * @param params create USS file parameters, see CreateUssFile class
+     * @param params [CreateUssFile] parameters
      * @return http response object
      * @throws Exception error processing request
      */
@@ -72,11 +72,36 @@ class ZosUssFile (
      */
     fun writeToFile(filePath: String, text: ByteArray): Response<*> {
         val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
-        val dataApi = buildApi<DataAPI>(url, httpClient)
+        val dataApi = buildApiWithBytesConverter<DataAPI>(url, httpClient)
         val call = dataApi.writeToUssFile(
             authorizationToken = Credentials.basic(connection.user, connection.password),
             filePath = FilePath(filePath),
             body = text
+        )
+        response = call.execute()
+        if (response?.isSuccessful != true) {
+            throw Exception(response?.errorBody()?.string())
+        }
+        return response ?: throw Exception("No response returned")
+    }
+
+    /**
+     * Writes to USS binary file. Creates new if not exist
+     *
+     * @param filePath path of the file or directory (e.g. u/jiahj/text.txt)
+     * @param inputFile file to be written to
+     * @return http response object
+     * @throws Exception error processing request
+     */
+    fun writeToFileBin(filePath: String, inputFile: ByteArray): Response<*> {
+        val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
+        val dataApi = buildApiWithBytesConverter<DataAPI>(url, httpClient)
+        val call = dataApi.writeToUssFile(
+            authorizationToken = Credentials.basic(connection.user, connection.password),
+            filePath = FilePath(filePath),
+            body = inputFile,
+            xIBMDataType = XIBMDataType(XIBMDataType.Type.BINARY),
+            contentType = "application/octet-stream"
         )
         response = call.execute()
         if (response?.isSuccessful != true) {
